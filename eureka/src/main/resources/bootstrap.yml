@@ -1,0 +1,17 @@
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+  instance:
+    prefer-ip-address: false
+    lease-expiration-duration-in-seconds: 90    # 过期时间
+    lease-renewal-interval-in-seconds: 28    # 续约间隔
+  server:
+    enable-self-preservation: false    # 自我保护模式
+    eviction-interval-timer-in-ms: 60    # 清理无效节点时间
+
+logging:
+  level:
+    com.netflix:
+      eureka: OFF
+      discovery: OFF
