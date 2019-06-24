@@ -35,12 +35,27 @@ public class FeignDecode {
                 // 序列化错误
                 return response.body();
             }
+            //返回值带ResultBean
+            if (isResultBean(type)) {
+                return resultBean;
+            }
             if (resultBean.getCode().equals("0")) {
                 return resultBean.getData();
             } else {
                 throw new BusinessException(resultBean.getMsg());
             }
         };
+    }
+
+    private boolean isResultBean(Type type) {
+        // 判断是否带泛型的类型
+        if (type instanceof ParameterizedType) {
+            Type[] actualTypeArguments = ((ParameterizedType) type).getActualTypeArguments();
+            return _typeFactory.constructParametricType((Class) actualTypeArguments[0], new JavaType[0]).hasRawClass(ResultBean.class);
+        } else {
+            // 简单类型直接用该类构建JavaType
+            return _typeFactory.constructParametricType((Class) type, new JavaType[0]).hasRawClass(ResultBean.class);
+        }
     }
 
     private JavaType buildJavaType(Type type) {
