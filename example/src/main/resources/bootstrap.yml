@@ -1,0 +1,8 @@
+server:
+  port: 18880
+
+spring:
+  profiles:
+    active: eureka
+  application:
+    name: example
