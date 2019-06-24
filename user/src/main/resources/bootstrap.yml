@@ -1,0 +1,8 @@
+server:
+  port: 18881
+
+spring:
+  profiles:
+    active: eureka
+  application:
+    name: user
