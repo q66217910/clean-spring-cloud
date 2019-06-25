@@ -7,6 +7,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringCloudApplication
+@EnableFeignClients("com.zd")
 @ComponentScan("com.zd")
 public class ExampleApplication {
 

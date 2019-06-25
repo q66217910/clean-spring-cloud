@@ -14,7 +14,10 @@ public class UserController implements UserApi {
 
     @GetMapping("/{userId}")
     public ResultBean<User> getUserById(@PathVariable Integer userId) {
-        return ResultBean.<User>builder().data(new User()).build();
+        User user = new User();
+        user.setUserId(1);
+        user.setUserName("");
+        return ResultBean.<User>builder().code("0").msg("").data(user).build();
     }
 
 }

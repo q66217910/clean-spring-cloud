@@ -1,5 +1,6 @@
 package com.zd.feign.config;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.TypeFactory;
@@ -22,24 +23,28 @@ public class FeignDecode {
 
     public FeignDecode() {
         this.mapper = new ObjectMapper();
+        this.mapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, true);
     }
 
     @Bean
     public Decoder feignDecoder() {
         return (response, type) -> {
+            boolean isResult = isResultBean(type);
             byte[] rowBytes = Util.toByteArray(response.body().asInputStream());
             ResultBean resultBean = null;
             try {
-                resultBean = mapper.readValue(rowBytes, buildJavaType(type));
+                resultBean = mapper.readValue(rowBytes, buildJavaType(type, isResult));
             } catch (Exception e) {
+                e.printStackTrace();
                 // 序列化错误
                 return response.body();
             }
-            //返回值带ResultBean
-            if (isResultBean(type)) {
-                return resultBean;
-            }
+
             if (resultBean.getCode().equals("0")) {
+                //返回值带ResultBean
+                if (isResult) {
+                    return resultBean;
+                }
                 return resultBean.getData();
             } else {
                 throw new BusinessException(resultBean.getMsg());
@@ -48,19 +53,24 @@ public class FeignDecode {
     }
 
     private boolean isResultBean(Type type) {
-        // 判断是否带泛型的类型
+        Class firstClass;
         if (type instanceof ParameterizedType) {
-            Type[] actualTypeArguments = ((ParameterizedType) type).getActualTypeArguments();
-            return _typeFactory.constructParametricType((Class) actualTypeArguments[0], new JavaType[0]).hasRawClass(ResultBean.class);
+            // 获取泛型类型
+            firstClass = (Class) ((ParameterizedType) type).getRawType();
+
         } else {
-            // 简单类型直接用该类构建JavaType
-            return _typeFactory.constructParametricType((Class) type, new JavaType[0]).hasRawClass(ResultBean.class);
+            firstClass = (Class) type;
         }
+        return ResultBean.class.isAssignableFrom(firstClass);
     }
 
-    private JavaType buildJavaType(Type type) {
+    private JavaType buildJavaType(Type type, boolean isResult) {
+        JavaType javaType = getJavaType(type);
+        if (isResult) {
+            return javaType;
+        }
         // 构建ApiResponses类型
-        return _typeFactory.constructParametricType(ResultBean.class, getJavaType(type));
+        return _typeFactory.constructParametricType(ResultBean.class, javaType);
     }
 
     private JavaType getJavaType(Type type) {

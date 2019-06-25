@@ -7,8 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient("user")
-@Component
+@FeignClient(name = "user",path = "/user")
 public interface UserApi {
 
     @GetMapping("/{userId}")
