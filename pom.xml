@@ -5,7 +5,7 @@
 
     <groupId>com.zd</groupId>
     <artifactId>clean-cloud</artifactId>
-    <version>${parent.version}</version>
+    <version>1.0.0</version>
     <packaging>pom</packaging>
 
     <parent>
@@ -19,6 +19,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
         <swagger.version>RELEASE</swagger.version>
+        <oauth2.version>RELEASE</oauth2.version>
     </properties>
 
     <dependencies>
@@ -53,11 +54,6 @@
             <optional>true</optional>
         </dependency>
 
-        <!-- oauth2  -->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-oauth2</artifactId>
-        </dependency>
 
         <!-- swagger2 -->
         <dependency>
