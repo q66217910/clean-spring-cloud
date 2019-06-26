@@ -24,7 +24,7 @@ public class UserDetailConfig {
      */
     @Bean
     public UserDetailsService userDetailsService() {
-        return s -> new User("", "", Lists.newArrayList());
+        return s -> new User("张三", "123456", Lists.newArrayList());
     }
 
     /**

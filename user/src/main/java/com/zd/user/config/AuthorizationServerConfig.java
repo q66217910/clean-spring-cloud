@@ -41,18 +41,27 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         return new RedisTokenStore(redisConnectionFactory);
     }
 
+    /**
+     * 用来配置授权（authorization）以及令牌（token）的访问端点和令牌服务(token services)。
+     */
     @Override
-    public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+    public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
         endpoints.authenticationManager(this.authenticationManager);
         endpoints.tokenStore(tokenStore());
     }
 
+    /**
+     * 用来配置令牌端点(Token Endpoint)的安全约束.
+     */
     @Override
-    public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
+    public void configure(AuthorizationServerSecurityConfigurer security) {
         security.tokenKeyAccess("permitAll()")
                 .checkTokenAccess("isAuthenticated()");
     }
 
+    /**
+     * 用来配置客户端详情服务（ClientDetailsService），客户端详情信息在这里进行初始化，你能够把客户端详情信息写死在这里或者是通过数据库来存储调取详情信息
+     */
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.inMemory()
