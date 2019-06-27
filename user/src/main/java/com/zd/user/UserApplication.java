@@ -7,7 +7,9 @@ import org.springframework.cloud.client.SpringCloudApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 
-@ComponentScan("com.zd")
+
+@ComponentScan(basePackages = "com.zd",
+        excludeFilters =@ComponentScan.Filter(pattern = "RedisT"))
 @SpringCloudApplication
 @EnableConfigurationProperties
 @EnableAuthorizationServer
