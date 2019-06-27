@@ -1,10 +1,13 @@
 package com.zd.core.config.redis.template;
 
-import org.springframework.context.annotation.Configuration;
+import com.zd.core.config.redis.RedisConfig;
+import com.zd.core.redis.RedisTemplateClass;
 
-@Configuration
-public class RedisTemplateToken {
+public class RedisTemplateToken<H, HK, HV> extends RedisTemplateClass<H, HK, HV> {
 
-
-
+    @Override
+    public RedisTemplateToken factory(RedisConfig redisConfig) {
+        super.factory(redisConfig);
+        return this;
+    }
 }

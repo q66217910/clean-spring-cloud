@@ -1,8 +1,8 @@
 package com.zd.user.config;
 
+import com.zd.core.config.redis.template.RedisTemplateToken;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
@@ -24,11 +24,11 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     /**
      * redis连接工厂
      */
-    private final RedisConnectionFactory redisConnectionFactory;
+    private final RedisTemplateToken redisTemplateToken;
 
-    public AuthorizationServerConfig(AuthenticationManager authenticationManager, RedisConnectionFactory redisConnectionFactory) {
+    public AuthorizationServerConfig(AuthenticationManager authenticationManager, RedisTemplateToken redisTemplateToken) {
         this.authenticationManager = authenticationManager;
-        this.redisConnectionFactory = redisConnectionFactory;
+        this.redisTemplateToken = redisTemplateToken;
     }
 
     /**
@@ -38,7 +38,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
      */
     @Bean
     public TokenStore tokenStore() {
-        return new RedisTokenStore(redisConnectionFactory);
+        return new RedisTokenStore(redisTemplateToken.getConnectionFactory());
     }
 
     /**

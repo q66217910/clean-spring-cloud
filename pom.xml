@@ -68,6 +68,14 @@
         </dependency>
     </dependencies>
 
+    <modules>
+        <module>core</module>
+        <module>eureka</module>
+        <module>feign</module>
+        <module>user</module>
+        <module>example</module>
+    </modules>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
