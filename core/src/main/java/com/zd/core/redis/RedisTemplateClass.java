@@ -8,7 +8,7 @@ import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactor
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializer;
 
-public class RedisTemplateClass<H, HK, HV> extends RedisTemplate<HK, HV> {
+public class RedisTemplateClass<HK, HV> extends RedisTemplate<HK, HV> {
 
     public RedisTemplateClass() {
         this.setKeySerializer(RedisSerializer.string());
@@ -25,7 +25,7 @@ public class RedisTemplateClass<H, HK, HV> extends RedisTemplate<HK, HV> {
         return this;
     }
 
-    public ClassOperationsImpl<H, HK, HV> opsForClass() {
+    public <H> ClassOperationsImpl<HK, H, HV> opsForClass() {
         return opsForClass();
     }
 
