@@ -12,9 +12,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
-@Primary
 public class UserDetailConfig {
 
     /**
@@ -24,7 +24,7 @@ public class UserDetailConfig {
      */
     @Bean
     public UserDetailsService userDetailsService() {
-        return s -> new User("张三", "123456", Lists.newArrayList());
+        return s -> new User("张三", new BCryptPasswordEncoder().encode("123456"), Lists.newArrayList());
     }
 
     /**
@@ -35,7 +35,7 @@ public class UserDetailConfig {
      */
     @Autowired
     public void globalUserDetails(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService());
+        auth.userDetailsService(userDetailsService()).passwordEncoder(new BCryptPasswordEncoder());
     }
 
 
