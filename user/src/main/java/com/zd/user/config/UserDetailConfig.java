@@ -1,21 +1,23 @@
 package com.zd.user.config;
 
 import com.google.common.collect.Lists;
+import com.zd.core.config.redis.template.RedisTemplateUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
-import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
 public class UserDetailConfig {
+
+    private final RedisTemplateUser<Integer, com.zd.feign.entity.User> templateUser;
+
+    public UserDetailConfig(RedisTemplateUser<Integer, com.zd.feign.entity.User> templateUser) {
+        this.templateUser = templateUser;
+    }
 
     /**
      * 注入用户信息服务
@@ -24,7 +26,12 @@ public class UserDetailConfig {
      */
     @Bean
     public UserDetailsService userDetailsService() {
-        return s -> new User("张三", new BCryptPasswordEncoder().encode("123456"), Lists.newArrayList());
+        return s -> {
+            com.zd.feign.entity.User user = new com.zd.feign.entity.User();
+            user.setUserId(100);
+            user = templateUser.opsForClass().getClass(user);
+            return new User(user.getUserName(), new BCryptPasswordEncoder().encode("123456"), Lists.newArrayList());
+        };
     }
 
     /**
