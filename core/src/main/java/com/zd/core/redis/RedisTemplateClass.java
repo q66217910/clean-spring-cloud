@@ -26,7 +26,7 @@ public class RedisTemplateClass<HK, HV> extends RedisTemplate<HK, HV> {
     }
 
     public <H> ClassOperationsImpl<HK, H, HV> opsForClass() {
-        return opsForClass();
+        return new ClassOperationsImpl<>(this);
     }
 
 

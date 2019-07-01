@@ -32,7 +32,7 @@ public class ClassOperationsImpl<H, HK, HV> implements ClassOperations<H, HK, HV
     @Override
     public void putClass(H key, Collection<HV> values) {
         Map<String, Object> hashKey = getHashKey(values);
-        redisTemplate.opsForHash().putAll(key, hashKey);
+        redisTemplate.opsForHash().putAll(getKey(key,values.stream().findFirst().get().getClass()), hashKey);
     }
 
 
