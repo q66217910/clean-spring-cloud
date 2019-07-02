@@ -35,11 +35,9 @@ public class FeignDecode {
             try {
                 resultBean = mapper.readValue(rowBytes, buildJavaType(type, isResult));
             } catch (Exception e) {
-                e.printStackTrace();
                 // 序列化错误
                 return response.body();
             }
-
             if (resultBean.getCode().equals("0")) {
                 //返回值带ResultBean
                 if (isResult) {
