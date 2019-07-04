@@ -4,6 +4,7 @@ import com.zd.core.config.redis.template.RedisTemplateToken;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
@@ -55,6 +56,10 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
      */
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) {
+        // 允许表单认证
+        security.allowFormAuthenticationForClients();
+        // 允许check_token访问
+        security.checkTokenAccess("permitAll()");
         security.tokenKeyAccess("permitAll()")
                 .checkTokenAccess("isAuthenticated()");
     }
@@ -64,9 +69,15 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
      */
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
+        //授权码授权模式
         clients.inMemory()
                 .withClient("client")
-                .secret("123456");
+                .secret(new BCryptPasswordEncoder().encode("123456"))
+                .redirectUris("localhost:18880")
+                .authorizedGrantTypes("authorization_code")
+                .scopes("all")
+                .accessTokenValiditySeconds(100000)
+                .refreshTokenValiditySeconds(100000);
     }
 
 }
