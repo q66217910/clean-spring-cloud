@@ -1,0 +1,8 @@
+server:
+  port: 18883
+
+spring:
+  profiles:
+    active: eureka
+  application:
+    name: geteway
