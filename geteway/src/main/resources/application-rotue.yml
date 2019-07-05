@@ -5,7 +5,7 @@ spring:
         - id: user
           uri: lb://authorized
           predicates:
-            - Path=/user/**
+            - Path=/authorized/**
       globalcors:
         corsConfigurations:
           '[/**]':
