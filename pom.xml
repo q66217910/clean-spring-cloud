@@ -60,7 +60,7 @@
         <module>core</module>
         <module>eureka</module>
         <module>feign</module>
-        <module>user</module>
+        <module>authorized</module>
         <module>example</module>
     </modules>
 

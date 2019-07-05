@@ -7,7 +7,7 @@
         <artifactId>clean-cloud</artifactId>
         <version>1.0.0</version>
     </parent>
-    <artifactId>user</artifactId>
+    <artifactId>authorized</artifactId>
 
     <dependencies>
         <dependency>
