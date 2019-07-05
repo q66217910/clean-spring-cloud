@@ -73,7 +73,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         clients.inMemory()
                 .withClient("client")
                 .secret(new BCryptPasswordEncoder().encode("123456"))
-                .redirectUris("localhost:18880")
+                .redirectUris("localhost:22001")
                 .authorizedGrantTypes("authorization_code")
                 .scopes("all")
                 .accessTokenValiditySeconds(100000)

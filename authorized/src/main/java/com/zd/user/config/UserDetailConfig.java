@@ -26,7 +26,7 @@ public class UserDetailConfig {
      */
     @Bean
     public UserDetailsService userDetailsService() {
-        return userName -> new User(userName, new BCryptPasswordEncoder().encode(""), Lists.newArrayList());
+        return userName -> new User(userName, new BCryptPasswordEncoder().encode("123456"), Lists.newArrayList());
     }
 
     /**
