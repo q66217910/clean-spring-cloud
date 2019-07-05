@@ -3,6 +3,6 @@ server:
 
 spring:
   profiles:
-    active: eureka
+    active: eureka,rotue
   application:
     name: geteway
