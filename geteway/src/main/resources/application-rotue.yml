@@ -6,3 +6,9 @@ spring:
           uri: lb://authorized
           predicates:
             - Path=/user/**
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "https://docs.spring.io"
+            allowedMethods:
+              - GET
