@@ -2,7 +2,6 @@ package com.zd.user.controller;
 
 import com.zd.core.bean.ResultBean;
 import com.zd.core.config.redis.template.RedisTemplateUser;
-import com.zd.core.redis.operations.impl.ClassOperationsImpl;
 import com.zd.feign.api.user.UserApi;
 import com.zd.feign.entity.User;
 import org.springframework.web.bind.annotation.*;
