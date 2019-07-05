@@ -17,8 +17,8 @@ public class RedisTemplateUserConfig {
     }
 
     @Bean
-    public RedisTemplateUser userRedisTemplate(RedisConfig tokenRedisConfig) {
-        return new RedisTemplateUser<>().factory(tokenRedisConfig);
+    public RedisTemplateUser userRedisTemplate(RedisConfig userRedisConfig) {
+        return new RedisTemplateUser<>().factory(userRedisConfig);
     }
 
 }

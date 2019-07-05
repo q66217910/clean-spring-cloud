@@ -21,7 +21,12 @@ public class RedisTemplateClass<HK, HV> extends RedisTemplate<HK, HV> {
         RedisStandaloneConfiguration configuration = new RedisStandaloneConfiguration(redisConfig.getHost(), redisConfig.getPort());
         configuration.setPassword(redisConfig.getPassword());
         configuration.setDatabase(redisConfig.getDb());
-        this.setConnectionFactory(new LettuceConnectionFactory(configuration));
+        configuration.setPort(redisConfig.getPort());
+        configuration.setHostName(redisConfig.getHost());
+        LettuceConnectionFactory factory = new LettuceConnectionFactory(configuration);
+        factory.afterPropertiesSet();
+        this.setConnectionFactory(factory);
+        this.afterPropertiesSet();
         return this;
     }
 

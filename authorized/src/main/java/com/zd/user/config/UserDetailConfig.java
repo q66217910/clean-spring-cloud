@@ -26,12 +26,7 @@ public class UserDetailConfig {
      */
     @Bean
     public UserDetailsService userDetailsService() {
-        return s -> {
-            com.zd.feign.entity.User user = new com.zd.feign.entity.User();
-            user.setUserId(100);
-            user = templateUser.opsForClass().getClass(user);
-            return new User(user.getUserName(), new BCryptPasswordEncoder().encode("123456"), Lists.newArrayList());
-        };
+        return userName -> new User(userName, new BCryptPasswordEncoder().encode(""), Lists.newArrayList());
     }
 
     /**
