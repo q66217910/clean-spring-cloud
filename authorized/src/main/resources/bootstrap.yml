@@ -1,8 +1,8 @@
 server:
-  port: 18881
+  port: 23001
 
 spring:
   profiles:
     active: eureka,redis,token
   application:
-    name: user
+    name: authorized

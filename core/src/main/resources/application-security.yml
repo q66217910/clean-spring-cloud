@@ -1,8 +1,8 @@
 security:
   oauth2:
     client:
-      accessTokenUri: http://localhost:18881/authserver/oauth/token
-      userAuthorizationUri: http://localhost:18881/authserver/oauth/authorize
+      accessTokenUri: http://localhost:23001/authserver/oauth/token
+      userAuthorizationUri: http://localhost:23001/authserver/oauth/authorize
       clientId: client
       clientSecret: 123456
     resource:

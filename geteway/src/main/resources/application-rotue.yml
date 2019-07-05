@@ -2,7 +2,7 @@ spring:
   cloud:
     gateway:
       routes:
-      - id: user
-        uri: lb://user
-        predicates:
-         - Path=/user/**
+        - id: user
+          uri: lb://authorized
+          predicates:
+            - Path=/user/**
