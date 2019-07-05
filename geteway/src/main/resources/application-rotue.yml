@@ -2,13 +2,29 @@ spring:
   cloud:
     gateway:
       routes:
-        - id: user
+        - id: authorized
           uri: lb://authorized
           predicates:
             - Path=/authorized/**
+          filters:
+            - StripPrefix= 1
+            - name: Hystrix
+              args:
+                name: authHystrixCommand
+                fallbackUri: forward:/hystrixTimeOut
+            - name: Retry
+              args:
+                retries: 3
+                status: 404
+                statusSeries: 500
       globalcors:
         corsConfigurations:
           '[/**]':
             allowedOrigins: "https://docs.spring.io"
             allowedMethods:
               - GET
+  redis:
+    host: localhost
+    port: 6379
+    password: 123456
+    database: 1
