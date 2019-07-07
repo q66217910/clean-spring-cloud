@@ -30,11 +30,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .antMatchers(HttpMethod.OPTIONS).permitAll()
-                .antMatchers("*swagger*").permitAll()
-                .anyRequest().authenticated().and()
-                .httpBasic().and().csrf().disable();
+        http.authorizeRequests().antMatchers(HttpMethod.OPTIONS).permitAll()
+                .and().authorizeRequests().antMatchers("*swagger*").permitAll()
+                .and().authorizeRequests().antMatchers("/login").permitAll()
+                .and().authorizeRequests().anyRequest().authenticated()
+                .and().httpBasic().and().csrf().disable();
     }
 
 }

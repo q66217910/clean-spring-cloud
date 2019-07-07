@@ -1,9 +1,12 @@
 security:
   oauth2:
     client:
-      accessTokenUri: http://localhost:22001/authorized/oauth/token
-      userAuthorizationUri: http://localhost:22001/authorized/oauth/authorize
+      accessTokenUri: http://localhost:23001/oauth/token
+      userAuthorizationUri: http://localhost:23001/oauth/authorize
       clientId: client
       clientSecret: 123456
     resource:
-      userInfoUri: http://localhost:22001/authorized/user
+      userInfoUri: http://localhost:23001/user
+      preferTokenInfo: false
+      jwt:
+        key-uri: http://localhost:23001/token
