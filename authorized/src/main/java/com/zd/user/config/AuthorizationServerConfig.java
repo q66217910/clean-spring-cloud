@@ -83,10 +83,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         //授权码授权模式(Authorization code)
         clients.inMemory()
-                .withClient("client")
+                .withClient("route")
                 .secret(passwordEncoder().encode("123456"))
-                .redirectUris("http://localhost:22001")
-                .authorizedGrantTypes("authorization_code")
+                .authorizedGrantTypes("client_credentials")
                 .scopes("all");
     }
 

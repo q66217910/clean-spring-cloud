@@ -3,9 +3,10 @@ security:
     client:
       accessTokenUri: http://localhost:23001/oauth/token
       userAuthorizationUri: http://localhost:23001/oauth/authorize
-      clientId: client
+      clientId: route
       clientSecret: 123456
       scope: server
+      grant-type: client_credentials
     resource:
       userInfoUri: http://localhost:23001/user
       preferTokenInfo: false
