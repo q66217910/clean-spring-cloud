@@ -5,6 +5,7 @@ security:
       userAuthorizationUri: http://localhost:23001/oauth/authorize
       clientId: client
       clientSecret: 123456
+      scope: server
     resource:
       userInfoUri: http://localhost:23001/user
       preferTokenInfo: false

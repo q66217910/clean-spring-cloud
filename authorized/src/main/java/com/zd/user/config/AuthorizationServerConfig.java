@@ -4,6 +4,8 @@ import com.zd.core.config.redis.template.RedisTemplateToken;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
@@ -61,22 +63,36 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) {
         // 允许表单认证
-        security.allowFormAuthenticationForClients();
         // 允许check_token访问
-        security.tokenKeyAccess("permitAll()")
+        security.allowFormAuthenticationForClients()
+                .tokenKeyAccess("permitAll()")
 //                .checkTokenAccess("isAuthenticated()")
                 .checkTokenAccess("permitAll()");
     }
 
     /**
-     * 用来配置客户端详情服务（ClientDetailsService），客户端详情信息在这里进行初始化，你能够把客户端详情信息写死在这里或者是通过数据库来存储调取详情信息
+     * 用来配置客户端详情服务（ClientDetailsService），客户端详情信息在这里进行初始化，
+     * 你能够把客户端详情信息写死在这里或者是通过数据库来存储调取详情信息
+     * <p>
+     * Authorization code（授权码模式）
+     * Implicit Grant（隐式模式）
+     * Resource Owner Password Credentials（密码模式）
+     * Client Credentials（客户端模式）
      */
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        //授权码授权模式
+        //授权码授权模式(Authorization code)
         clients.inMemory()
                 .withClient("client")
-                .secret("123456");
+                .secret(passwordEncoder().encode("123456"))
+                .redirectUris("http://localhost:22001")
+                .authorizedGrantTypes("authorization_code")
+                .scopes("all");
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
 }
