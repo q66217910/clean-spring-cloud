@@ -65,9 +65,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         // 允许表单认证
         // 允许check_token访问
         security.allowFormAuthenticationForClients()
-                .tokenKeyAccess("permitAll()")
-//                .checkTokenAccess("isAuthenticated()")
-                .checkTokenAccess("permitAll()");
+                .tokenKeyAccess("isAuthenticated()")
+                .checkTokenAccess("isAuthenticated()");
     }
 
     /**
@@ -85,7 +84,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         clients.inMemory()
                 .withClient("route")
                 .secret(passwordEncoder().encode("123456"))
-                .authorizedGrantTypes("client_credentials")
+                .authorizedGrantTypes("client_credentials","refresh_token")
                 .scopes("all");
     }
 
