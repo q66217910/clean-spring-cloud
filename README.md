@@ -8,3 +8,6 @@
     eureka: 21001、21002、21003
     geteway: 22001
     authorized: 23001
+    
+##关于本地运行：
+    JVM配置：-Xmx256m -Xms256m
