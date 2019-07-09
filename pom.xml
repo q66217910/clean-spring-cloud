@@ -62,6 +62,7 @@
         <module>feign</module>
         <module>authorized</module>
         <module>example</module>
+        <module>geteway</module>
     </modules>
 
     <dependencyManagement>

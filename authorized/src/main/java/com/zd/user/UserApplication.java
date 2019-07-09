@@ -16,7 +16,6 @@ import java.security.Principal;
 @SpringCloudApplication
 @EnableConfigurationProperties
 @EnableAuthorizationServer
-@EnableResourceServer
 @RestController
 public class UserApplication {
 
