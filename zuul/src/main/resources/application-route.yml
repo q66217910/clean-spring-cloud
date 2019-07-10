@@ -4,7 +4,6 @@ zuul:
       path: /authorized/**
       serviceId: authorized
 
-
 ribbon:
   okhttp:
     enabled: true
