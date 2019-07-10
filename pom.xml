@@ -63,6 +63,7 @@
         <module>authorized</module>
         <module>example</module>
         <module>geteway</module>
+        <module>zuul</module>
     </modules>
 
     <dependencyManagement>
