@@ -10,5 +10,5 @@ public class AuthorizedFallbackProvider extends CommonFallbackProvider {
     public String getRoute() {
         return "authorized";
     }
-    
+
 }

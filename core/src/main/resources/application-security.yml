@@ -2,10 +2,10 @@ security:
   oauth2:
     client:
       scope: server
-      client-id: route
-      client-secret: 123456
-      access-token-uri: http://localhost:22001/authorized/oauth/token
-      user-authorization-uri: http://localhost:22001/authorized/oauth/authorize
+      clientId: route
+      clientSecret: 123456
+      accessTokenUri: http://localhost:22001/authorized/oauth/token
+      userAuthorizationUri: http://localhost:22001/authorized/oauth/authorize
     resource:
       user-info-uri: http://localhost:22001/authorized/user
       prefer-token-info: false

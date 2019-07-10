@@ -3,6 +3,7 @@ zuul:
     authorized:
       path: /authorized/**
       serviceId: authorized
+      sensitiveHeaders:
 
 ribbon:
   okhttp:

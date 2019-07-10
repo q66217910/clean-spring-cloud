@@ -5,18 +5,18 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
-import org.springframework.web.reactive.config.WebFluxConfigurer;
 
 @EnableWebFluxSecurity
 @EnableReactiveMethodSecurity
-public class WebSecurityConfig implements WebFluxConfigurer {
+public class WebSecurityConfig {
 
     @Bean
-    public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http){
+    public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
         return http.csrf().disable()
                 .formLogin().disable()
                 .httpBasic().disable()
                 .authorizeExchange()
+                .pathMatchers("/authorized/oauth/token").permitAll()
                 .anyExchange().authenticated()
                 .and().build();
     }

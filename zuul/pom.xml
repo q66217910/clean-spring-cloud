@@ -24,6 +24,12 @@
             <groupId>com.zd</groupId>
             <artifactId>core</artifactId>
             <version>${parent.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.cloud</groupId>
+                    <artifactId>spring-cloud-starter-oauth2</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 
