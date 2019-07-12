@@ -6,3 +6,6 @@ spring:
     active: eureka,route,security
   application:
     name: zuul
+
+configuration:
+  redis:
