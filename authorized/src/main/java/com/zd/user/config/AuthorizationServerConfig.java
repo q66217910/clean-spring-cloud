@@ -65,8 +65,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         // 允许表单认证
         // 允许check_token访问
         security.allowFormAuthenticationForClients()
-                .tokenKeyAccess("isAuthenticated()")
-                .checkTokenAccess("isAuthenticated()");
+                .tokenKeyAccess("permitAll()")
+                .checkTokenAccess("permitAll()");
     }
 
     /**
