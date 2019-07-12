@@ -51,10 +51,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests().antMatchers(HttpMethod.OPTIONS).permitAll()
-                .and().authorizeRequests().antMatchers("/oauth/token").permitAll()
-                .and().authorizeRequests().antMatchers("/oauth/authorize").permitAll()
-                .and().authorizeRequests().antMatchers("/login").permitAll()
-                .and().authorizeRequests().antMatchers("*swagger*").permitAll()
                 .and().authorizeRequests().anyRequest().authenticated()
                 .and().httpBasic().and().csrf().disable();
     }

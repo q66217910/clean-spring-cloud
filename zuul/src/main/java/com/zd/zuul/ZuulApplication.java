@@ -11,13 +11,12 @@ import org.springframework.context.annotation.FilterType;
 @EnableZuulProxy
 @SpringCloudApplication
 @ComponentScan(basePackages = "com.zd",
-        excludeFilters = {@ComponentScan.Filter(type = FilterType.CUSTOM,value ={ConfigFilter.class})})
+        excludeFilters = {@ComponentScan.Filter(type = FilterType.CUSTOM, value = {ConfigFilter.class})})
 public class ZuulApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(ZuulApplication.class, args);
     }
-
 
 
 }
