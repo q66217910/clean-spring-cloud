@@ -3,6 +3,7 @@ zuul:
     authorized:
       path: /authorized/**
       serviceId: authorized
+      stripPrefix: false
       sensitiveHeaders:
 
 ribbon:

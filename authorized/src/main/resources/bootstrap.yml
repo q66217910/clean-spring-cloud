@@ -1,5 +1,7 @@
 server:
   port: 23001
+  servlet:
+    context-path: /authorized
 
 spring:
   profiles:
