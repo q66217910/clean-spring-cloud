@@ -5,6 +5,11 @@ zuul:
       serviceId: authorized
       stripPrefix: false
       sensitiveHeaders:
+    zipkin:
+      path: /zipkin/**
+      serviceId: zipkin
+      stripPrefix: false
+      sensitiveHeaders:
 
 ribbon:
   okhttp:
