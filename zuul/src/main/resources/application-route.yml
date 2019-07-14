@@ -1,16 +1,20 @@
 zuul:
+  sensitiveHeaders: Authorization
+  ignored-headers: Access-Control-Allow-Credentials,Access-Control-Allow-Origin,Vary,X-Frame-Options
   routes:
     authorized:
       path: /authorized/**
       serviceId: authorized
       stripPrefix: false
-      sensitiveHeaders:
     zipkin:
       path: /zipkin/**
       serviceId: zipkin
-      stripPrefix: false
-      sensitiveHeaders:
 
 ribbon:
   okhttp:
     enabled: true
+
+spring:
+  http:
+    encoding:
+      force: true

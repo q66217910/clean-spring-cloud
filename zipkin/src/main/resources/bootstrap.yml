@@ -1,5 +1,6 @@
 server:
   port: 24001
+  context-path:
 
 spring:
   profiles:
