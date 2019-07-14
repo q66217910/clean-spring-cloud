@@ -1,0 +1,8 @@
+server:
+  port: 24001
+
+spring:
+  profiles:
+    active: eureka
+  application:
+    name: zipkin
