@@ -3,6 +3,6 @@ server:
 
 spring:
   profiles:
-    active: eureka,route,security
+    active: eureka,route,security,zipkin
   application:
     name: zuul
