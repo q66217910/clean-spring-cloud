@@ -1,8 +1,8 @@
-server:
-  port: 22001
-
 spring:
-  profiles:
-    active: eureka,route,security,zipkin
-  application:
-    name: zuul
+  http:
+    encoding:
+      force: true
+
+ribbon:
+  okhttp:
+    enabled: true

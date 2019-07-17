@@ -1,0 +1,7 @@
+server:
+  port: 22003
+
+spring:
+  profiles:
+    active: eureka,route,security,zipkin
+

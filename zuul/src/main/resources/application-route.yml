@@ -1,3 +1,7 @@
+spring:
+  application:
+    name: zuul
+
 zuul:
   sensitiveHeaders: Authorization
   ignored-headers: Access-Control-Allow-Credentials,Access-Control-Allow-Origin,Vary,X-Frame-Options
@@ -10,11 +14,3 @@ zuul:
       path: /zipkin/**
       serviceId: zipkin
 
-ribbon:
-  okhttp:
-    enabled: true
-
-spring:
-  http:
-    encoding:
-      force: true
