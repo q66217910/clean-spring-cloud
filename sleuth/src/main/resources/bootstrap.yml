@@ -6,3 +6,11 @@ spring:
     active: eureka
   application:
     name: sleuth
+
+logging:
+  level:
+    org:
+      springframework:
+        web:
+          servlet:
+            DispatcherServlet: DEBUG
