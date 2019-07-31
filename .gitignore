@@ -377,3 +377,11 @@
 /.idea/uiDesigner.xml
 /.idea/vcs.xml
 /.idea/workspace.xml
+/.idea/libraries/Maven__com_googlecode_javaewah_JavaEWAH_1_1_6.xml
+/.idea/libraries/Maven__com_jcraft_jsch_0_1_54.xml
+/.idea/libraries/Maven__com_jcraft_jzlib_1_1_1.xml
+/.idea/libraries/Maven__org_eclipse_jgit_org_eclipse_jgit_5_1_3_201810200350_r.xml
+/.idea/libraries/Maven__org_eclipse_jgit_org_eclipse_jgit_http_apache_5_1_3_201810200350_r.xml
+/.idea/libraries/Maven__org_springframework_cloud_spring_cloud_config_client_2_1_0_RELEASE.xml
+/.idea/libraries/Maven__org_springframework_cloud_spring_cloud_config_server_2_1_0_RELEASE.xml
+/.idea/libraries/Maven__org_springframework_cloud_spring_cloud_starter_config_2_1_0_RELEASE.xml
