@@ -1,0 +1,12 @@
+  #api格式版本。当前最新是v1alpha1
+  apiVersion: v1alpha1
+  kind: Deployment
+  metadata:
+    #该服务的标识符。在给定库中必须唯一。
+    name: eureka
+    labels:
+      app: eureka
+    namespace: eureka
+  spec:
+    #该服务的标签
+    title: eureka
