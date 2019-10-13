@@ -13,29 +13,26 @@ public interface ClassOperations<H, HK, HV> {
 
     /**
      * @param values 对象信息
-     * @return 存储redis 主键:属性  值的形式
      */
+    @SuppressWarnings("unchecked")
     default void putClass(HV... values) {
          putClass(Arrays.asList(values));
     }
 
-    ;
 
     /**
      * @param values 对象信息
-     * @return 存储redis 主键:属性  值的形式
      */
     default void putClass(Collection<HV> values) {
          putClass(null, values);
     }
 
-    ;
 
     /**
      * @param key    redis key
      * @param values 对象信息
-     * @return 存储redis 主键:属性  值的形式
      */
+    @SuppressWarnings("unchecked")
     default void putClass(H key, HV... values) {
          putClass(key, Arrays.asList(values));
     };
@@ -43,7 +40,6 @@ public interface ClassOperations<H, HK, HV> {
     /**
      * @param key    redis key
      * @param values 对象信息
-     * @return 存储redis 主键:属性  值的形式
      */
     void putClass(H key, Collection<HV> values);
 
