@@ -1,0 +1,69 @@
+#api格式版本。当前最新是v1alpha1
+apiVersion: v1
+kind: Pod
+metadata:
+  #该服务的标识符。在给定库中必须唯一。
+  name: nginx
+  labels:
+    app: nginx
+spec:
+  #容器
+  containers:
+    - image: nginx
+      name: nginx
+      ports:
+        - containerPort: 80
+      #挂载卷
+      volumeMounts:
+        - mountPath:   /usr/share/nginx
+          name:   nginx
+      #cgoup设置   CPU的单位是milicpu，500mcpu=0.5cpu；而内存的单位则包括E, P, T, G, M, K, Ei, Pi, Ti, Gi, Mi, Ki等
+      resources:
+        requests:
+          cpu: "300m"     #CPU请求，可以超过
+          memory: "56Mi"  #内存请求，可以超过；但如果超过，容器可能会在Node内存不足时清理
+        limits:
+          cpu: "500m"    #CPU上限，可以短暂超过，容器也不会被停止
+          memory: "128Mi"   #内存上限，不可以超过；如果超过，容器可能会被停止或调度到其他资源充足的机器上
+      # Always：不管镜像是否存在都会进行一次拉取。/ Never：不管镜像是否存在都不会进行拉取 / IfNotPresent：只有镜像不存在时，才会进行镜像拉取。
+      imagePullPolicy: Always
+      # 探测应用是否处于健康状态，如果不健康则删除重建改容器
+      livenessProbe:
+        httpGet:
+          port: 80
+          path: /
+        initialDelaySeconds: 15
+        timeoutSeconds: 1
+      #探测应用是否启动完成并且处于正常服务状态，如果不正常则更新容器的状态
+      readinessProbe:
+        httpGet:
+          port: 80
+          path: /ping
+        initialDelaySeconds: 5
+        timeoutSeconds: 1
+      #容器生命周期钩子(监听容器生命周期的特定事件，并在事件发生时执行已注册的回调函数)
+      lifecycle:
+        #容器启动后执行，注意由于是异步执行，它无法保证一定在ENTRYPOINT之后运行。如果失败，容器会被杀死，并根据RestartPolicy决定是否重启
+        postStart:
+          #在容器内执行命令 (httpGet：向指定URL发起GET请求)
+          exec:
+            command:
+              - ["/bin/sh", "-c", "echo Hello from the postStart handler > /usr/share/message"]
+        #容器停止前执行，常用于资源清理。如果失败，容器同样也会被杀死
+        preStop:
+          exec:
+            command: ["/usr/sbin/nginx","-s","quit"]
+      #容器权限
+      securityContext:
+        capabilities:
+          add:
+            - NET_ADMIN
+          drop:
+            - KILL
+            #在所有容器运行之前执行（run-to-completion），常用来初始化配置
+  initContainers:
+    - name: install
+  #一个Pod可以指定它所想要运行的Node节点
+  nodeSelector:
+    #指定该Pod只想运行在带有disktype=ssd标签的Node上
+    disktype: ssd
