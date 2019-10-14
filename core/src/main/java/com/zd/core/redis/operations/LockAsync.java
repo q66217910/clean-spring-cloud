@@ -1,6 +1,4 @@
-package com.zd.core.redis.operations.impl;
-
-import org.redisson.api.RFuture;
+package com.zd.core.redis.operations;
 
 import java.util.concurrent.Future;
 

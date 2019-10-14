@@ -1,7 +1,5 @@
 package com.zd.core.redis.operations;
 
-import com.zd.core.redis.operations.impl.LockAsync;
-
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 

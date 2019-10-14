@@ -1,11 +1,11 @@
 package com.zd.core.redis.operations.impl;
 
 import com.zd.core.redis.operations.LockOperations;
+import io.netty.util.HashedWheelTimer;
 import io.netty.util.Timeout;
+import io.netty.util.TimerTask;
 import lombok.Data;
 import lombok.NonNull;
-import org.redisson.RedissonLock;
-import org.redisson.client.protocol.RedisCommands;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.script.RedisScript;
 
@@ -22,7 +22,7 @@ public class LockOperationsImpl implements LockOperations {
 
     private final @NonNull RedisTemplate redisTemplate;
 
-    private static final ConcurrentMap<String, RedissonLock.ExpirationEntry> EXPIRATION_RENEWAL_MAP = new ConcurrentHashMap<>();
+    private static final ConcurrentMap<String, LockOperationsImpl.ExpirationEntry> EXPIRATION_RENEWAL_MAP = new ConcurrentHashMap<>();
 
     private long lockWatchdogTimeout;
 
@@ -30,10 +30,12 @@ public class LockOperationsImpl implements LockOperations {
 
     private String entryName;
 
+    protected long internalLockLeaseTime;
+
     protected String getLockName(long threadId) {
         return id + ":" + threadId;
     }
-    
+
     @Override
     public boolean tryLock(String keyName, long waitTime, long leaseTime, TimeUnit unit) throws ExecutionException, InterruptedException {
         return tryLockAsync(keyName).get();
@@ -56,30 +58,59 @@ public class LockOperationsImpl implements LockOperations {
         CompletableFuture<Boolean> ttlRemainingFuture = tryLockInnerAsync(keyName, lockWatchdogTimeout, TimeUnit.MILLISECONDS, threadId);
         ttlRemainingFuture.thenAccept(res -> {
             if (res) {
-                scheduleExpirationRenewal(threadId);
+                scheduleExpirationRenewal(keyName, threadId);
             }
         });
         return ttlRemainingFuture;
     }
 
-    private void scheduleExpirationRenewal(long threadId) {
-        RedissonLock.ExpirationEntry entry = new RedissonLock.ExpirationEntry();
-        RedissonLock.ExpirationEntry oldEntry = EXPIRATION_RENEWAL_MAP.putIfAbsent(getEntryName(), entry);
+    private void scheduleExpirationRenewal(String keyName, long threadId) {
+        LockOperationsImpl.ExpirationEntry entry = new LockOperationsImpl.ExpirationEntry();
+        LockOperationsImpl.ExpirationEntry oldEntry = EXPIRATION_RENEWAL_MAP.putIfAbsent(getEntryName(), entry);
         if (oldEntry != null) {
             oldEntry.addThreadId(threadId);
         } else {
             entry.addThreadId(threadId);
-            renewExpiration();
+            renewExpiration(keyName);
         }
     }
 
-    private void renewExpiration() {
-        RedissonLock.ExpirationEntry ee = EXPIRATION_RENEWAL_MAP.get(getEntryName());
+    private void renewExpiration(String keyName) {
+        LockOperationsImpl.ExpirationEntry ee = EXPIRATION_RENEWAL_MAP.get(getEntryName());
         if (ee == null) {
             return;
         }
+        Timeout task = new HashedWheelTimer().newTimeout(timeout -> {
+            ExpirationEntry ent = EXPIRATION_RENEWAL_MAP.get(getEntryName());
+            if (ent == null) {
+                return;
+            }
+            Long threadId = ent.getFirstThreadId();
+            if (threadId == null) {
+                return;
+            }
+            CompletableFuture<Boolean> future = renewExpirationAsync(keyName, threadId);
+            future.thenAccept(res -> {
+                if (res) {
+                    // reschedule itself
+                    renewExpiration(keyName);
+                }
+            });
+        }, internalLockLeaseTime / 3, TimeUnit.MILLISECONDS);
+
+        ee.setTimeout(task);
     }
 
+    protected CompletableFuture<Boolean> renewExpirationAsync(String keyName, long threadId) {
+        return CompletableFuture.supplyAsync(() ->
+                (Boolean) redisTemplate.execute(RedisScript.<Boolean>of(
+                        "if (redis.call('hexists', KEYS[1], ARGV[2]) == 1) then " +
+                                "redis.call('pexpire', KEYS[1], ARGV[1]); " +
+                                "return 1; " +
+                                "end; " +
+                                "return 0;"), Collections.<Object>singletonList(keyName), internalLockLeaseTime, getLockName(threadId))
+        );
+    }
 
     @SuppressWarnings("unchecked")
     <T> CompletableFuture<T> tryLockInnerAsync(String keyName, long leaseTime, TimeUnit unit, long threadId) {
