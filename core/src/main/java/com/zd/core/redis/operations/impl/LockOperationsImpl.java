@@ -1,5 +1,6 @@
 package com.zd.core.redis.operations.impl;
 
+import com.zd.core.redis.RedisTemplateClass;
 import com.zd.core.redis.operations.LockOperations;
 import io.netty.util.HashedWheelTimer;
 import io.netty.util.Timeout;
@@ -20,7 +21,7 @@ import java.util.concurrent.*;
 @Data
 public class LockOperationsImpl implements LockOperations {
 
-    private final @NonNull RedisTemplate redisTemplate;
+    private final @NonNull RedisTemplateClass redisTemplate;
 
     private static final ConcurrentMap<String, LockOperationsImpl.ExpirationEntry> EXPIRATION_RENEWAL_MAP = new ConcurrentHashMap<>();
 
@@ -179,6 +180,7 @@ public class LockOperationsImpl implements LockOperations {
             }
         }
 
+        
 
         public void setTimeout(Timeout timeout) {
             this.timeout = timeout;

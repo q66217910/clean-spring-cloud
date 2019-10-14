@@ -5,6 +5,10 @@ import com.zd.core.redis.operations.LockOperations;
 import com.zd.core.redis.operations.impl.ClassOperationsImpl;
 import com.zd.core.redis.operations.impl.LockOperationsImpl;
 import com.zd.core.redis.serializer.JacksonRedisSerializer;
+import org.redisson.Redisson;
+import org.redisson.api.RedissonClient;
+import org.redisson.api.RedissonReactiveClient;
+import org.redisson.config.Config;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -14,6 +18,8 @@ import java.util.concurrent.locks.Lock;
 
 public class RedisTemplateClass<HK, HV> extends RedisTemplate<HK, HV> {
 
+    private static RedissonReactiveClient reactiveClient;
+
     public RedisTemplateClass() {
         this.setKeySerializer(RedisSerializer.string());
         this.setHashKeySerializer(RedisSerializer.string());
@@ -22,6 +28,8 @@ public class RedisTemplateClass<HK, HV> extends RedisTemplate<HK, HV> {
     }
 
     public RedisTemplateClass factory(RedisConfig redisConfig) {
+
+
         RedisStandaloneConfiguration configuration = new RedisStandaloneConfiguration(redisConfig.getHost(), redisConfig.getPort());
         configuration.setPassword(redisConfig.getPassword());
         configuration.setDatabase(redisConfig.getDb());
@@ -31,6 +39,13 @@ public class RedisTemplateClass<HK, HV> extends RedisTemplate<HK, HV> {
         factory.afterPropertiesSet();
         this.setConnectionFactory(factory);
         this.afterPropertiesSet();
+
+        Config config = new Config();
+        config.useSingleServer()
+                .setAddress("redis://" + redisConfig.getHost() + ":" + redisConfig.getPort())
+                .setPassword(redisConfig.getPassword())
+                .setDatabase(redisConfig.getDb());
+        reactiveClient = Redisson.createReactive(config);
         return this;
     }
 
@@ -42,5 +57,7 @@ public class RedisTemplateClass<HK, HV> extends RedisTemplate<HK, HV> {
         return new LockOperationsImpl(this);
     }
 
-
+    public static RedissonReactiveClient getReactiveClient() {
+        return reactiveClient;
+    }
 }
