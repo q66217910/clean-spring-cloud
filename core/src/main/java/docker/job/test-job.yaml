@@ -1,0 +1,21 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name:  pi
+spec:
+  #在任意时间最多启动多少pod同时运行
+  parallelism: 2
+  #至少要完成pod数目
+  completions: 4
+  template:
+    spec:
+      containers:
+        - name: pi
+          image: resouer/unbutu-bc
+          command: ["sh","-c","echo ' scale = 10000; 4*a(1) ' | bc -l "]
+      # NEVER:失败一直启动新pod  OnFailure：失败一直重启当前pod
+      restartPolicy: Never
+  #失败重试次数 默认值6 （重试时间指数增加）
+  backoffLimit: 4
+  #最长运行时间
+  activeDeadlineSeconds: 100

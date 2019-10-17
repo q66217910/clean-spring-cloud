@@ -1,0 +1,21 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name:  hello
+spec:
+  jobTemplate:
+      spec:
+        template:
+          spec:
+            containers:
+              - name: hello
+                image: busbox
+                args:
+                  - /bin/sh
+                  - -c
+                  - date; echo Hello from the Kubernates cluster
+            restartPolicy: OnFailure
+  schedule: " */1 * * * * "
+  # ALLOW:JOB没处理完可以同时存在  Forbid：该创建周期被跳过  Replace:被替代
+  concurrencyPolicy: Allow
+  
