@@ -69,7 +69,7 @@ spec:
     disktype: ssd
   volumes:
     - name:  nginx
-      ## Projected Volume 
+      ## Projected Volume
       projected:
         sources:
           #帮你把 Pod 想要访问的加密数据，存放到 Etcd 中。然后，你就可以通过在 Pod 的容器里挂载 Volume 的方式，访问到这些 Secret 里保存的信息了
@@ -77,6 +77,10 @@ spec:
               name: user
           - secret:
               name: pass
+    # 挂载Volume
+    - name: pv-storage
+      persistentVolumeClaim:
+        claimName: pv-claim
   #重启策略    （Always：在任何情况下，只要容器不在运行状态，就自动重启容器；） OnFailure: 只在容器 异常时才自动重启容器； Never: 从来不重启容器。
   restartPolicy:        Always
     

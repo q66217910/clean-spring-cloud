@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pv-claim
+spec:
+  #  Volume 的挂载方式
+  accessModes:
+    # ReadWriteOnce : 该卷可以通过单个节点以读写方式安装
+    # ReadOnlyMany  : 该卷可以被许多节点只读安装
+    # ReadWriteMany : 该卷可以被许多节点读写安装
+    - ReadWriteOnce
+  resources:
+    #Volume 大小至少是 1 GiB
+    requests:
+      storage: 1Gi

@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql
+  labels:
+    app: mysql
+data:
+  master.cnf: |
+    #主节点 (开启log-bin，二进制文件进行主从复制)
+    [mysqlId]
+    log-bin
+  slave.cnf: |
+    #从节点 （只读操作，只允许主从同步）
+    [mysqlId]
+    super-read-only

@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv
+spec:
+  capacity:
+    storage : 10Gi
+  rbd:
+    image: redis-pv
+    monitors:
+      - '127.0.0.1:7001'
+      - '127.0.0.1:7002'
+      - '127.0.0.1:7003'
