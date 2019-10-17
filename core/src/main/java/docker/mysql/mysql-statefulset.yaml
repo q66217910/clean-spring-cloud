@@ -145,7 +145,7 @@ spec:
             name: mysql
   volumeClaimTemplates:
     - metadata:
-        name: mysql
+        name: data
       spec:
         accessModes:
           - "ReadWriteOnce"
