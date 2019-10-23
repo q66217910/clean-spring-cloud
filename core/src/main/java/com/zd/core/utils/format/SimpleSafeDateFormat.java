@@ -12,7 +12,8 @@ public class SimpleSafeDateFormat extends SimpleDateFormat {
 
     @Override
     public StringBuffer format(Date date, StringBuffer toAppendTo, FieldPosition pos) {
-        this.calendar = Calendar.getInstance();
-        return super.format(date, toAppendTo, pos);
+        synchronized (date) {
+            return super.format(date, toAppendTo, pos);
+        }
     }
 }
