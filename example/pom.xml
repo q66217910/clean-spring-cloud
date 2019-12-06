@@ -15,6 +15,12 @@
             <artifactId>feign</artifactId>
             <version>${parent.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.shalousun</groupId>
+            <artifactId>smart-doc</artifactId>
+            <version>${swagger.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>

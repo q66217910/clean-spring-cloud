@@ -85,6 +85,7 @@
         <module>example</module>
         <module>geteway</module>
         <module>zuul</module>
+        <module>admin</module>
     </modules>
 
     <dependencyManagement>

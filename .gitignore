@@ -386,3 +386,7 @@
 /.idea/libraries/Maven__org_springframework_cloud_spring_cloud_config_server_2_1_0_RELEASE.xml
 /.idea/libraries/Maven__org_springframework_cloud_spring_cloud_starter_config_2_1_0_RELEASE.xml
 /.idea/libraries/Maven__net_logstash_logback_logstash_logback_encoder_4_6.xml
+/admin/admin.iml
+/.idea/libraries/Maven__de_codecentric_spring_boot_admin_starter_server_unknown.xml
+/.idea/libraries/Maven__org_springframework_cloud_spring_cloud_starter_oauth2_2_2_0_RELEASE.xml
+/.idea/
