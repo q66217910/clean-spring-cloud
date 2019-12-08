@@ -1,0 +1,8 @@
+spring:
+  boot:
+    admin:
+      client:
+        api-path:  http://localhost:25001/admin
+
+logging:
+  file: D:\work\logs

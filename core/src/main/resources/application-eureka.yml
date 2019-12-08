@@ -6,4 +6,4 @@ eureka:
     instance-id: ${spring.application.name}:${server.port}
   client:
     serviceUrl:
-      defaultZone: http://admin:admin@localhost:21001/eureka/,http://admin:admin@localhost:21002/eureka/,http://admin:admin@localhost:21003/eureka/
+      defaultZone: http://localhost:21001/eureka/,http://localhost:21002/eureka/,http://localhost:21003/eureka/
