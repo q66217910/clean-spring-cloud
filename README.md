@@ -7,6 +7,7 @@
     geteway: 22001
     authorized: 23001
     zipkin: 24001
+    admin: 25001
     
 ## 关于本地运行：
     JVM配置：-Xmx256m -Xms256m

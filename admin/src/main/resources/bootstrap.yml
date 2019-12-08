@@ -1,0 +1,4 @@
+server:
+  port: 25001
+  servlet:
+    context-path: /admin

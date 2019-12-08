@@ -18,8 +18,6 @@ import java.util.concurrent.locks.Lock;
 
 public class RedisTemplateClass<HK, HV> extends RedisTemplate<HK, HV> {
 
-    private static RedissonReactiveClient reactiveClient;
-
     public RedisTemplateClass() {
         this.setKeySerializer(RedisSerializer.string());
         this.setHashKeySerializer(RedisSerializer.string());
@@ -39,13 +37,7 @@ public class RedisTemplateClass<HK, HV> extends RedisTemplate<HK, HV> {
         factory.afterPropertiesSet();
         this.setConnectionFactory(factory);
         this.afterPropertiesSet();
-
-        Config config = new Config();
-        config.useSingleServer()
-                .setAddress("redis://" + redisConfig.getHost() + ":" + redisConfig.getPort())
-                .setPassword(redisConfig.getPassword())
-                .setDatabase(redisConfig.getDb());
-        reactiveClient = Redisson.createReactive(config);
+        
         return this;
     }
 
@@ -56,8 +48,5 @@ public class RedisTemplateClass<HK, HV> extends RedisTemplate<HK, HV> {
     public <H> LockOperations opsForLock() {
         return new LockOperationsImpl(this);
     }
-
-    public static RedissonReactiveClient getReactiveClient() {
-        return reactiveClient;
-    }
+    
 }
