@@ -390,3 +390,4 @@
 /.idea/libraries/Maven__de_codecentric_spring_boot_admin_starter_server_unknown.xml
 /.idea/libraries/Maven__org_springframework_cloud_spring_cloud_starter_oauth2_2_2_0_RELEASE.xml
 /.idea/
+/clean-cloud.iml
