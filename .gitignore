@@ -391,3 +391,4 @@
 /.idea/libraries/Maven__org_springframework_cloud_spring_cloud_starter_oauth2_2_2_0_RELEASE.xml
 /.idea/
 /clean-cloud.iml
+/admin/target/
