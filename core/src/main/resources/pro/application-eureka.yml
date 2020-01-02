@@ -1,0 +1,9 @@
+eureka:
+  instance:
+    lease-expiration-duration-in-seconds: 15
+    lease-renewal-interval-in-seconds: 5
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${server.port}
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:21001/eureka/,http://localhost:21002/eureka/,http://localhost:21003/eureka/

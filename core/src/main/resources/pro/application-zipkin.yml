@@ -1,0 +1,6 @@
+spring:
+  zipkin:
+    base-url: http://localhost:24001/
+  sleuth:
+    sampler:
+      probability: 1

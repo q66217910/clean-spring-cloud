@@ -1,0 +1,12 @@
+redis:
+  config:
+    token:
+      host: localhost
+      port: 6379
+      password:
+      db: 0
+    user:
+      host: localhost
+      port: 6379
+      password:
+      db: 5

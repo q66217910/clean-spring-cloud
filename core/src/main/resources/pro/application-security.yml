@@ -1,0 +1,13 @@
+security:
+  oauth2:
+    client:
+      scope: server
+      clientId: route
+      clientSecret: 123456
+      accessTokenUri: http://localhost:22001/authorized/oauth/token
+      userAuthorizationUri: http://localhost:22001/authorized/oauth/authorize
+    resource:
+      user-info-uri: http://localhost:22001/authorized/user
+      prefer-token-info: false
+      jwt:
+        key-valuel: jwt
