@@ -127,6 +127,7 @@
         </dependencies>
     </dependencyManagement>
 
+    
     <repositories>
         <repository>
             <id>spring-snapshots</id>

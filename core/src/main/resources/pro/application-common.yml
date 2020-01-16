@@ -2,3 +2,7 @@ token:
   oauth2:
     header: Authorization
     start: Bearer
+
+feign:
+  hystrix:
+    enabled: true

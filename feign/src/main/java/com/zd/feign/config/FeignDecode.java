@@ -6,8 +6,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.zd.core.bean.ResultBean;
 import com.zd.core.exception.BusinessException;
+import feign.Retryer;
 import feign.Util;
 import feign.codec.Decoder;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -24,6 +26,11 @@ public class FeignDecode {
     public FeignDecode() {
         this.mapper = new ObjectMapper();
         this.mapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, true);
+    }
+
+    @Bean
+    public Retryer feignRetryer() {
+        return new Retryer.Default();
     }
 
     @Bean
