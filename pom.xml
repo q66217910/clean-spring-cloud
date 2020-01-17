@@ -21,7 +21,7 @@
         <swagger.version>RELEASE</swagger.version>
         <oauth2.version>RELEASE</oauth2.version>
         <zipkin.version>2.12.9</zipkin.version>
-        <admin.version>2.1.5</admin.version>
+        <admin.version>2.2.1</admin.version>
     </properties>
 
     <dependencies>

@@ -1,6 +1,7 @@
 package com.zd.example.controller;
 
 import com.zd.core.bean.ResultBean;
+import com.zd.entity.user.AuthUser;
 import com.zd.feign.api.ExampleApi;
 import com.zd.feign.api.user.UserApi;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +25,7 @@ public class ExampleController implements ExampleApi {
     }
 
     @GetMapping("/user")
-    public ResultBean<User> getUser() {
+    public ResultBean<AuthUser> getUser() {
         return userApi.getUserById(1);
     }
 }
