@@ -2,6 +2,7 @@ package com.zd.user.config;
 
 import com.google.common.collect.Lists;
 import com.zd.core.config.redis.template.RedisTemplateUser;
+import com.zd.entity.user.AuthUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,9 +14,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @Configuration
 public class UserDetailConfig {
 
-    private final RedisTemplateUser<Integer, com.zd.feign.entity.User> templateUser;
+    private final RedisTemplateUser<Integer, AuthUser> templateUser;
 
-    public UserDetailConfig(RedisTemplateUser<Integer, com.zd.feign.entity.User> templateUser) {
+    public UserDetailConfig(RedisTemplateUser<Integer, AuthUser> templateUser) {
         this.templateUser = templateUser;
     }
 

@@ -3,7 +3,6 @@ package com.zd.example.controller;
 import com.zd.core.bean.ResultBean;
 import com.zd.feign.api.ExampleApi;
 import com.zd.feign.api.user.UserApi;
-import com.zd.feign.entity.User;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

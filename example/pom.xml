@@ -26,8 +26,7 @@
         </plugins>
         <resources>
             <resource>
-                <directory>src/main/resource/${profiles.active}</directory>
-                <filtering>true</filtering>
+                <directory>src/main/resources/${profiles.active}/</directory>
             </resource>
         </resources>
     </build>
