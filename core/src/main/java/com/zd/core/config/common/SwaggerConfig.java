@@ -1,4 +1,4 @@
-package com.zd.core.config;
+package com.zd.core.config.common;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

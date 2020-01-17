@@ -1,4 +1,4 @@
-package com.zd.core;
+package com.zd.core.config.common;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.bind.annotation.GetMapping;

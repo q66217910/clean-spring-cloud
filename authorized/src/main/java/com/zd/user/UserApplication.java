@@ -22,18 +22,11 @@ import java.security.Principal;
 @SpringCloudApplication
 @EnableConfigurationProperties
 @EnableAuthorizationServer
-@RestController
-@ComponentScan(basePackages = "com.zd",
-        excludeFilters = {@ComponentScan.Filter(type = FilterType.CUSTOM, value = {ConfigFilter.class})})
+@ComponentScan(basePackages = "com.zd.core.config.common")
 @Import({RedisTemplateTokenConfig.class, RedisTemplateUserConfig.class})
 public class UserApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(UserApplication.class, args);
-    }
-
-    @GetMapping("/user")
-    public Principal user(Principal authentication) {
-        return authentication;
     }
 }
