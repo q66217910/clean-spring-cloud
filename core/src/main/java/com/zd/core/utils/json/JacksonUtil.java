@@ -381,7 +381,7 @@ public class JacksonUtil {
         if (json == null) {
             return null;
         }
-        return getMapper().readValue(json, new TypeReference<Object>() {
+        return (T) getMapper().readValue(json, new TypeReference<Object>() {
         });
     }
 
@@ -389,7 +389,7 @@ public class JacksonUtil {
      * 将byte数组转换成Obj
      */
     public <T> T byte2Obj(byte[] by) throws JsonParseException, JsonMappingException, IOException {
-        return getMapper().readValue(by, new TypeReference<Object>() {
+        return (T) getMapper().readValue(by, new TypeReference<Object>() {
         });
     }
 
@@ -402,7 +402,7 @@ public class JacksonUtil {
 
     public <T> T bean2Obj(Object obj) {
         try {
-            return getMapper().readValue(getMapper().writeValueAsString(obj), new TypeReference<Object>() {
+            return (T) getMapper().readValue(getMapper().writeValueAsString(obj), new TypeReference<Object>() {
             });
         } catch (IOException e) {
             e.printStackTrace();
