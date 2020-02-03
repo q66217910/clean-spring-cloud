@@ -20,13 +20,21 @@
             <groupId>com.zd</groupId>
             <artifactId>core</artifactId>
             <version>${parent.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-web</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
     </dependencies>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${plugin.boot.version}</version>
+            </plugin>
+        </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/resources/${profiles.active}/</directory>
+            </resource>
+        </resources>
+    </build>
 </project>
