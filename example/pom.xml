@@ -8,7 +8,7 @@
         <version>1.0.0</version>
     </parent>
     <artifactId>example</artifactId>
-    
+
     <dependencies>
         <dependency>
             <groupId>com.zd</groupId>
@@ -18,18 +18,18 @@
     </dependencies>
 
     <build>
-    <plugins>
-        <plugin>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-maven-plugin</artifactId>
-            <version>${plugin.boot.version}</version>
-        </plugin>
-    </plugins>
-    <resources>
-        <resource>
-            <directory>src/main/resources/${profiles.active}/</directory>
-        </resource>
-    </resources>
-</build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${plugin.boot.version}</version>
+            </plugin>
+        </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/resources/${profiles.active}/</directory>
+            </resource>
+        </resources>
+    </build>
 
 </project>

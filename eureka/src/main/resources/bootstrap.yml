@@ -10,12 +10,6 @@ eureka:
     enable-self-preservation: false    # 自我保护模式
     eviction-interval-timer-in-ms: 60    # 清理无效节点时间
 
-spring:
-  security:
-    user:
-      name: admin
-      password: admin
-
 logging:
   level:
     com.netflix:
