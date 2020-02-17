@@ -1,8 +1,0 @@
-server:
-  port: 25001
-
-spring:
-  profiles:
-    active: eureka
-  application:
-    name: admin
