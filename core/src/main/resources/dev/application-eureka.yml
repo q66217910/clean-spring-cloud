@@ -7,5 +7,12 @@ eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:21001/eureka/,http://localhost:21002/eureka/,http://localhost:21003/eureka/
-    fetch-registry: false
-    register-with-eureka: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: ALWAYS

@@ -1,14 +1,8 @@
 server:
   port: 25001
-  servlet:
-    context-path: /admin
 
 spring:
   profiles:
     active: eureka
   application:
     name: admin
-  boot:
-    admin:
-      client:
-        url: http://localhost:25002
