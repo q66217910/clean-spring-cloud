@@ -15,9 +15,7 @@ public class WebSecurityConfig {
         return http.csrf().disable()
                 .formLogin().disable()
                 .httpBasic().disable()
-                .authorizeExchange()
-                .pathMatchers("/authorized/oauth/token").permitAll()
-                .anyExchange().authenticated()
+                .authorizeExchange().anyExchange().permitAll()
                 .and().build();
     }
 

@@ -4,7 +4,7 @@
 
 ## 默认端口号：
     eureka: 21001、21002、21003
-    geteway: 22001
+    geteway: 80
     authorized: 23001
     zipkin: 24001
     admin: 25001

@@ -57,6 +57,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         http.requestMatcher(new OAuth2RequestedMatcher())
                 .authorizeRequests()
                 .antMatchers("/oauth/**").permitAll()
+                .antMatchers("/favicon.ico","/webjars/**","/v2/api-docs","/swagger-resources/**","/swagger-ui.html").permitAll()
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
                 .anyRequest().authenticated();
     }

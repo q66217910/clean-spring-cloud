@@ -2,6 +2,7 @@ package com.zd.core.config.common;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.OAuthBuilder;
 import springfox.documentation.builders.PathSelectors;
@@ -32,7 +33,8 @@ public class SwaggerConfig {
                 .select()
                 .paths(PathSelectors.any())
                 .apis(RequestHandlerSelectors.basePackage("com.zd"))
-                .build();
+                .build()
+                .enable(true);
     }
 
     @Bean
@@ -54,6 +56,5 @@ public class SwaggerConfig {
                 new AuthorizationScope("write", "Grants write access"),
                 new AuthorizationScope("trust", "Grants read write and delete access"));
     }
-
-
+    
 }
