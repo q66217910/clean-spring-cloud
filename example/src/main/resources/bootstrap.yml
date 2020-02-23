@@ -3,6 +3,6 @@ server:
 
 spring:
   profiles:
-    active: eureka,redis,admin,common
+    active: eureka,redis,admin,common,security
   application:
     name: example
