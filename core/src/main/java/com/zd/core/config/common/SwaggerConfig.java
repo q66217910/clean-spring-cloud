@@ -1,5 +1,7 @@
 package com.zd.core.config.common;
 
+import org.apache.logging.log4j.util.Strings;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -15,11 +17,12 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig {
-
+    
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("通用api")
@@ -34,6 +37,7 @@ public class SwaggerConfig {
                 .paths(PathSelectors.any())
                 .apis(RequestHandlerSelectors.basePackage("com.zd"))
                 .build()
+                .securitySchemes(Collections.singletonList(oauth()))
                 .enable(true);
     }
 
@@ -48,7 +52,7 @@ public class SwaggerConfig {
 
     @Bean
     List<GrantType> grantTypes() {
-        return Collections.singletonList(new ResourceOwnerPasswordCredentialsGrant("/oauth/token"));
+        return Collections.singletonList(new ClientCredentialsGrant("/oauth/token"));
     }
 
     private List<AuthorizationScope> scopes() {
@@ -56,5 +60,5 @@ public class SwaggerConfig {
                 new AuthorizationScope("write", "Grants write access"),
                 new AuthorizationScope("trust", "Grants read write and delete access"));
     }
-    
+
 }

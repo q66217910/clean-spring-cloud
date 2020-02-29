@@ -5,6 +5,8 @@ import com.zd.core.config.redis.template.RedisTemplateUser;
 import com.zd.entity.user.AuthUser;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -22,10 +24,9 @@ public class UserController {
         return ResultBean.success(redisTemplateUser.opsForClass().getClass(user));
     }
 
-    @PostMapping("/user")
-    public ResultBean<AuthUser> saveUser(@RequestBody AuthUser user) {
-        redisTemplateUser.opsForClass().putClass(user);
-        return ResultBean.success();
+    @RequestMapping("/me")
+    public Principal saveUser(Principal principal) {
+        return principal;
     }
 
 }

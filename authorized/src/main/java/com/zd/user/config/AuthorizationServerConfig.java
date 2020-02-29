@@ -1,6 +1,7 @@
 package com.zd.user.config;
 
 import com.zd.core.config.redis.template.RedisTemplateToken;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -82,9 +83,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         //授权码授权模式(Authorization code)
         clients.inMemory()
-                .withClient("route")
-                .secret(passwordEncoder().encode("123456"))
-                .authorizedGrantTypes("client_credentials","refresh_token")
+                .withClient("admin")
+                .secret("123456")
+                .authorizedGrantTypes("client_credentials")
                 .scopes("all");
     }
 

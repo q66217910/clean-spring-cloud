@@ -5,6 +5,7 @@ import com.zd.core.config.redis.configuration.RedisTemplateUserConfig;
 import com.zd.core.config.redis.template.RedisTemplateToken;
 import com.zd.core.config.redis.template.RedisTemplateUser;
 import com.zd.core.filter.type.ConfigFilter;
+import com.zd.core.interfaces.EnableCommonScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.client.SpringCloudApplication;
@@ -22,7 +23,7 @@ import java.security.Principal;
 @SpringCloudApplication
 @EnableConfigurationProperties
 @EnableAuthorizationServer
-@ComponentScan(basePackages = "com.zd.core.config.common")
+@EnableCommonScan
 @Import({RedisTemplateTokenConfig.class, RedisTemplateUserConfig.class})
 public class UserApplication {
 
@@ -30,3 +31,4 @@ public class UserApplication {
         SpringApplication.run(UserApplication.class, args);
     }
 }
+
