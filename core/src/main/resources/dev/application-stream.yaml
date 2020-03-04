@@ -1,0 +1,14 @@
+spring:
+  cloud:
+    stream:
+      binders:
+        rabbits:
+          type: rabbit
+          environment:
+            spring:
+              rabbitmq:
+                host: localhost
+                port: 15671
+                username: guest
+                password: guest
+    

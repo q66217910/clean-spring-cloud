@@ -3,6 +3,7 @@ package com.zd.example;
 import com.zd.core.config.common.SwaggerConfig;
 import com.zd.core.config.common.WebMvcConfig;
 import com.zd.core.interfaces.EnableCommonScan;
+import com.zd.core.interfaces.EnableStream;
 import com.zd.feign.EnableCommonFeignClients;
 import org.springframework.boot.SpringApplication;
 import org.springframework.cloud.client.SpringCloudApplication;

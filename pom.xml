@@ -42,8 +42,7 @@
         <!--stream-->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-stream-reactive</artifactId>
-            <version>1.1.2.RELEASE</version>
+            <artifactId>spring-cloud-starter-stream-rabbit</artifactId>
         </dependency>
         <!-- ADMIN -->
         <dependency>

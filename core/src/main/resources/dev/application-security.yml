@@ -11,4 +11,3 @@ security:
       user-info-uri: http://localhost:23001/user/me
     authorization:
       check-token-access: http://localhost:8001/oauth/check_token
-
