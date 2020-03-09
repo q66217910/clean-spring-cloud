@@ -77,19 +77,19 @@ public class CollectionUtil {
     }
 
     /**
-     *  二分查找法
+     * 二分查找法
      */
     public static int searchInsert(int[] nums, int target) {
-        int left = 0, right = nums.length - 1; 
-        while(left <= right) {
-            int mid=(right+left)>>1;
-            if(nums[mid] == target) { 
+        int left = 0, right = nums.length - 1;
+        while (left <= right) {
+            int mid = (right + left) >> 1;
+            if (nums[mid] == target) {
                 // 相关逻辑
                 return mid;
-            } else if(nums[mid] < target) {
+            } else if (nums[mid] < target) {
                 left = mid + 1;
             } else {
-                right = mid - 1; 
+                right = mid - 1;
             }
         }
         // 相关返回值
@@ -97,16 +97,28 @@ public class CollectionUtil {
     }
 
     /**
-     *  最大和连续子集
+     * 最大和连续子集
      */
     public int maxSubArray(int[] nums) {
         int n = nums.length, maxSum = nums[0];
-        for(int i = 1; i < n; ++i) {
+        for (int i = 1; i < n; ++i) {
             if (nums[i - 1] > 0) {
                 nums[i] += nums[i - 1];
             }
             maxSum = Math.max(nums[i], maxSum);
         }
         return maxSum;
+    }
+
+    /**
+     * 数组顺序最大差值
+     */
+    public int maxProfit(int[] prices) {
+        int last = 0, profit = 0;
+        for (int i = 0; i < prices.length - 1; i++) {
+            last = Math.max(0, prices[i + 1] + last - prices[i]);
+            profit = Math.max(profit, last);
+        }
+        return profit;
     }
 }

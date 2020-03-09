@@ -2,6 +2,8 @@ package com.zd.core.utils.type;
 
 import com.google.common.collect.ImmutableMap;
 
+import java.util.*;
+
 public class NumberUtil {
 
     /**
@@ -64,7 +66,7 @@ public class NumberUtil {
      * C : 100
      * D : 500
      * M : 1000
-     *
+     * <p>
      * 1.比较连续2个值
      * 2.当小值在大值的左边 减小值
      * 3.小值在大值的右边，则加小值
@@ -72,9 +74,9 @@ public class NumberUtil {
     public static int romanToInt(String s) {
         int sum = 0;
         int preNum = romanMap.get(s.charAt(0));
-        for(int i = 1;i < s.length(); i ++) {
+        for (int i = 1; i < s.length(); i++) {
             int num = romanMap.get(s.charAt(i));
-            if(preNum < num) {
+            if (preNum < num) {
                 sum -= preNum;
             } else {
                 sum += preNum;
@@ -83,5 +85,74 @@ public class NumberUtil {
         }
         sum += preNum;
         return sum;
+    }
+
+    /**
+     * coins 数组中求和  amount 最小数量
+     */
+    public int coinChange(int[] coins, int amount) {
+        int max = amount + 1;
+        int[] dp = new int[amount + 1];
+        Arrays.fill(dp, max);
+        //dp: i 为金额 d[i] 表示次数  （默认amount + 1）
+        dp[0] = 0;
+        for (int i = 0; i <= amount; i++) {
+            for (int j = 0; j < coins.length; j++) {
+                //如果硬币金额超过 amount跳过
+                if (coins[j] <= i) {
+                    //dp[i - coins[j]]表示之前差额的次数
+                    dp[i] = Math.min(dp[i], dp[i - coins[j]] + 1);
+                }
+            }
+        }
+        return dp[amount] > amount ? -1 : dp[amount];
+    }
+
+    public int orangesRotting(int[][] grid) {
+
+        int[] dr = new int[]{-1, 0, 1, 0};
+        int[] dc = new int[]{0, -1, 0, 1};
+
+        ArrayDeque<Integer> queue = new ArrayDeque<>();
+        Map<Integer, Integer> map = new HashMap<>();
+        //初始化
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[0].length; j++) {
+                if (grid[i][j] == 2) {
+                    //找出所有腐坏的
+                    int code = i * grid[0].length + j;
+                    queue.add(code);
+                    map.put(code, 0);
+                }
+            }
+        }
+
+        int ans = 0;
+        while (!queue.isEmpty()) {
+            int code = queue.remove();
+            int r = code / grid[0].length, c = code % grid[0].length;
+            for (int i = 0; i < 4; ++i) {
+                int nr = r + dr[i];
+                int nc = c + dc[i];
+                if (0 <= nr && nr < grid.length && 0 <= nc && nc < grid[0].length && grid[nr][nc] == 1) {
+                    grid[nr][nc] = 2;
+                    int ncode = nr * grid[0].length + nc;
+                    queue.add(ncode);
+                    map.put(ncode, map.get(code) + 1);
+                    ans = map.get(ncode);
+                }
+            }
+        }
+
+        for (int[] row: grid)
+            for (int v: row)
+                if (v == 1)
+                    return -1;
+
+        return ans;
+    }
+
+    public static void main(String[] args) {
+        new NumberUtil().orangesRotting(new int[][]{{1,2}});
     }
 }
