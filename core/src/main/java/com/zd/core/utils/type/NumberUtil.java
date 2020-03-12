@@ -1,6 +1,7 @@
 package com.zd.core.utils.type;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 
 import java.util.*;
 
@@ -144,15 +145,43 @@ public class NumberUtil {
             }
         }
 
-        for (int[] row: grid)
-            for (int v: row)
+        for (int[] row : grid)
+            for (int v : row)
                 if (v == 1)
                     return -1;
 
         return ans;
     }
 
+    public int[] distributeCandies(int candies, int num_people) {
+        int[] result = new int[num_people];
+        int num = 1;
+        for (int i = 0; candies > num; i++) {
+            result[i % num_people] = num + result[i % num_people];
+            candies -= num;
+            num++;
+        }
+        if (candies > 0) {
+            result[(num - 1) % num_people] = candies + result[(num - 1) % num_people];
+        }
+        return result;
+    }
+
+    public int climbStairs(int n) {
+        if (n == 1) {
+            return 1;
+        }
+        int[] dp = new int[n + 1];
+        dp[1] = 1;
+        dp[2] = 2;
+        for (int i = 3; i <= n; i++) {
+            dp[i] = dp[i - 1] + dp[i - 2];
+        }
+        return dp[n];
+    }
+
+
     public static void main(String[] args) {
-        new NumberUtil().orangesRotting(new int[][]{{1,2}});
+          new NumberUtil().climbStairs(3);
     }
 }

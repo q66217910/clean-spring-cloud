@@ -1,6 +1,9 @@
 package com.zd.core.utils.type;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
 
 public class CollectionUtil {
 
@@ -120,5 +123,51 @@ public class CollectionUtil {
             profit = Math.max(profit, last);
         }
         return profit;
+    }
+
+    /**
+     * 合并两个数组
+     */
+    public void merge(int[] A, int m, int[] B, int n) {
+        int a = 0, b = 0;
+        if (B.length == 0) {
+            return;
+        }
+        for (int i = 0; i < m + n; i++) {
+            if (b > n - 1) {
+                break;
+            }
+            if (A[a + b] > B[b] || a == m) {
+                System.arraycopy(A, i, A, i + 1, A.length - i - 1);
+                A[i] = B[b];
+                b++;
+            } else {
+                a++;
+            }
+        }
+    }
+
+    /**
+     * 输出和target的连续正整数
+     */
+    public int[][] findContinuousSequence(int target) {
+        int i = 1;
+        List<int[]> list = new ArrayList<>();
+        while (target > 0) {
+            target -= i++;
+            if (target > 0 && target % i == 0) {
+                int[] array = new int[i];
+                for (int k = target / i, j = 0; k < target / i + i; k++, j++) {
+                    array[j] = k;
+                }
+                list.add(array);
+            }
+        }
+        Collections.reverse(list);
+        return list.toArray(new int[0][]);
+    }
+
+    public static void main(String[] args) {
+        new CollectionUtil().findContinuousSequence(17);
     }
 }
