@@ -2,6 +2,8 @@ package com.zd.core.utils.type;
 
 import com.google.common.collect.ImmutableMap;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Stack;
 
 public class StringUtil {
@@ -35,15 +37,15 @@ public class StringUtil {
         }
         return stack.isEmpty();
     }
-    
+
     /**
      * 在 haystack 字符串中找出 needle 字符串出现的第一个位置 (从0开始)。如果不存在，则返回  -1。
      */
     public int strStr(String haystack, String needle) {
-        if(needle.equals("")) {
+        if (needle.equals("")) {
             return 0;
         }
-        if(haystack.equals("")) {
+        if (haystack.equals("")) {
             return -1;
         }
         KMP kmp = new KMP(needle);
@@ -93,27 +95,27 @@ public class StringUtil {
 
 
     public String countAndSay(int n) {
-        if(n==1){
+        if (n == 1) {
             return "1";
         }
-        return say(countAndSay(n-1));
+        return say(countAndSay(n - 1));
     }
 
-    private String say(String s){
+    private String say(String s) {
         //记录数值出现的次数
-        int count=1;
+        int count = 1;
         //当前的数值
         char num = s.charAt(0);
         StringBuilder sb = new StringBuilder();
-        for(int i =1;i<s.length();i++){
+        for (int i = 1; i < s.length(); i++) {
             char c = s.charAt(i);
-            if(c==num){
+            if (c == num) {
                 count++;
-            }else{
+            } else {
                 sb.append(count);
                 sb.append(num);
                 num = c;
-                count=1;
+                count = 1;
             }
         }
         sb.append(count);
@@ -121,4 +123,72 @@ public class StringUtil {
         return sb.toString();
     }
 
+    /**
+     * 自定义字符串压缩
+     */
+    public String compressString(String s) {
+        int num = 1;
+        StringBuffer sb = new StringBuffer();
+        for (int i = 1; i < s.length() + 1; i++) {
+            char c = s.charAt(i - 1);
+            if (i < s.length() && s.charAt(i) == s.charAt(i - 1)) {
+                num += 1;
+                continue;
+            }
+            sb.append(c);
+            sb.append(num);
+            num = 1;
+        }
+        if (sb.length() >= s.length() || sb.length() == 0) {
+            return s;
+        }
+        return sb.toString();
+    }
+
+    public int countCharacters(String[] words, String chars) {
+        int result = 0;
+        Map<Character, Integer> map = new HashMap<>();
+        for (int i = 0; i < chars.length(); i++) {
+            Integer num = map.get(chars.charAt(i));
+            if (num == null) {
+                num = 0;
+            }
+            map.put(chars.charAt(i), ++num);
+        }
+        for (String word : words) {
+            Map<Character, Integer> hashMap = new HashMap<>(map);
+            boolean flag = true;
+            for (int i = 0; i < word.length(); i++) {
+                Integer num = hashMap.get(word.charAt(i));
+                if (num == null || num == 0) {
+                    flag = false;
+                    break;
+                }
+                num--;
+                hashMap.put(word.charAt(i), num);
+            }
+            if (flag) {
+                result += word.length();
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 是否是回文串
+     */
+    public boolean isPalindrome(String s) {
+        String low = s.toLowerCase();
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < low.length(); i++) {
+            if (Character.isLetterOrDigit(low.charAt(i))) {
+                sb.append(low.charAt(i));
+            }
+        }
+        return sb.toString().equals(sb.reverse().toString());
+    }
+
+    public static void main(String[] args) {
+        System.out.println(new StringUtil().countCharacters(new String[]{"dyiclysmffuhibgfvapygkorkqllqlvokosagyelotobicwcmebnpznjbirzrzsrtzjxhsfpiwyfhzyonmuabtlwin", "ndqeyhhcquplmznwslewjzuyfgklssvkqxmqjpwhrshycmvrb", "ulrrbpspyudncdlbkxkrqpivfftrggemkpyjl", "boygirdlggnh", "xmqohbyqwagkjzpyawsydmdaattthmuvjbzwpyopyafphx", "nulvimegcsiwvhwuiyednoxpugfeimnnyeoczuzxgxbqjvegcxeqnjbwnbvowastqhojepisusvsidhqmszbrnynkyop", "hiefuovybkpgzygprmndrkyspoiyapdwkxebgsmodhzpx", "juldqdzeskpffaoqcyyxiqqowsalqumddcufhouhrskozhlmobiwzxnhdkidr", "lnnvsdcrvzfmrvurucrzlfyigcycffpiuoo", "oxgaskztzroxuntiwlfyufddl", "tfspedteabxatkaypitjfkhkkigdwdkctqbczcugripkgcyfezpuklfqfcsccboarbfbjfrkxp", "qnagrpfzlyrouolqquytwnwnsqnmuzphne", "eeilfdaookieawrrbvtnqfzcricvhpiv", "sisvsjzyrbdsjcwwygdnxcjhzhsxhpceqz", "yhouqhjevqxtecomahbwoptzlkyvjexhzcbccusbjjdgcfzlkoqwiwue", "hwxxighzvceaplsycajkhynkhzkwkouszwaiuzqcleyflqrxgjsvlegvupzqijbornbfwpefhxekgpuvgiyeudhncv", "cpwcjwgbcquirnsazumgjjcltitmeyfaudbnbqhflvecjsupjmgwfbjo", "teyygdmmyadppuopvqdodaczob", "qaeowuwqsqffvibrtxnjnzvzuuonrkwpysyxvkijemmpdmtnqxwekbpfzs", "qqxpxpmemkldghbmbyxpkwgkaykaerhmwwjonrhcsubchs"}, "usdruypficfbpfbivlrhutcgvyjenlxzeovdyjtgvvfdjzcmikjraspdfp"));
+    }
 }

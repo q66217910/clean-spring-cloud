@@ -1,5 +1,7 @@
 package com.zd.core.utils.type;
 
+import com.google.common.collect.Lists;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -167,7 +169,38 @@ public class CollectionUtil {
         return list.toArray(new int[0][]);
     }
 
+    public List<Integer> getRow(int rowIndex) {
+       return generate(rowIndex).get(rowIndex-1);
+    }
+
+    /**
+     * 生成杨辉三角
+     */
+    public List<List<Integer>> generate(int numRows) {
+        List<List<Integer>> result = new ArrayList<>();
+        if (numRows == 0) {
+            return result;
+        }
+        List<Integer> last = new ArrayList<>();
+        last.add(1);
+        result.add(last);
+        if (numRows == 1) {
+            return result;
+        }
+        for (int i = 1; i < numRows; i++) {
+            List<Integer> list = new ArrayList<>();
+            list.add(1);
+            list.add(1);
+            for (int j = 1; j < last.size(); j++) {
+                list.add(j, last.get(j - 1) + last.get(j));
+            }
+            last = list;
+            result.add(list);
+        }
+        return result;
+    }
+
     public static void main(String[] args) {
-        new CollectionUtil().findContinuousSequence(17);
+        new CollectionUtil().generate(5);
     }
 }

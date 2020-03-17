@@ -180,8 +180,44 @@ public class NumberUtil {
         return dp[n];
     }
 
+    /**
+     * 查找数组种超过半数的数
+     */
+    public int majorityElement(int[] nums) {
+        int count = 0;
+        Integer candidate = null;
+        for (int num : nums) {
+            if (count == 0) {
+                candidate = num;
+            }
+            count += (candidate == num) ? 1 : -1;
+        }
+        return candidate;
+    }
+
+    public int maxProfit(int[] prices) {
+        int result = 0;
+        Integer start = null;
+        for (int i = 1; i < prices.length; i++) {
+            if (prices[i - 1] < prices[i]) {
+                if (start == null) {
+                    start = prices[i - 1];
+                }
+            }
+            if (prices[i - 1] > prices[i]) {
+                if (start != null) {
+                    result += prices[i - 1] - start;
+                    start = null;
+                }
+            }
+            if (i == prices.length - 1 && start != null) {
+                result += prices[i] - start;
+            }
+        }
+        return result;
+    }
 
     public static void main(String[] args) {
-          new NumberUtil().climbStairs(3);
+        System.out.println(new NumberUtil().maxProfit(new int[]{1, 2, 3, 4, 5}));
     }
 }
