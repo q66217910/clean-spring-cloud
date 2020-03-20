@@ -1,11 +1,12 @@
 package com.zd.core.utils.type;
 
 import com.google.common.collect.Lists;
+import org.apache.catalina.core.ApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class CollectionUtil {
 
@@ -170,7 +171,7 @@ public class CollectionUtil {
     }
 
     public List<Integer> getRow(int rowIndex) {
-       return generate(rowIndex).get(rowIndex-1);
+        return generate(rowIndex).get(rowIndex - 1);
     }
 
     /**
@@ -200,7 +201,56 @@ public class CollectionUtil {
         return result;
     }
 
+    /**
+     * 重复数
+     */
+    public boolean containsDuplicate(int[] nums) {
+        return Arrays.stream(nums).distinct().count() < nums.length;
+    }
+
+    public boolean containsNearbyDuplicate(int[] nums, int k) {
+        HashSet<Integer> set = new HashSet<>();
+        for (int i = 0; i < nums.length; i++) {
+            if (set.contains(nums[i])) {
+                return true;
+            }
+            set.add(nums[i]);
+            if (set.size() > k) {
+                set.remove(nums[i - k]);
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 连续数组缺失数字
+     */
+    public int missingNumber(int[] nums) {
+        int[] result = new int[2 * nums.length + 1];
+        for (int i = 0; i < nums.length; i++) {
+            result[i + nums.length] = i;
+            result[i] = nums[i];
+        }
+        result[2 * nums.length] = nums.length;
+        int s = 0;
+        for (int i = 0; i < result.length; i++) {
+              s^=result[i];
+        }
+        return s;
+    }
+
+    public void moveZeroes(int[] nums) {
+        for (int lastNonZeroFoundAt = 0, cur = 0; cur < nums.length; cur++) {
+            if (nums[cur] != 0) {
+                int i = lastNonZeroFoundAt++;
+                int temp =  nums[i];
+                nums[i] =  nums[cur];
+                nums[cur] = temp;
+            }
+        }
+    }
+
     public static void main(String[] args) {
-        new CollectionUtil().generate(5);
+        System.out.println(new CollectionUtil().containsNearbyDuplicate(new int[]{1, 1, 1, 1, 1}, 1));
     }
 }

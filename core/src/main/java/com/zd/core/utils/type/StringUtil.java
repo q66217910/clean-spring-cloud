@@ -2,9 +2,9 @@ package com.zd.core.utils.type;
 
 import com.google.common.collect.ImmutableMap;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Stack;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class StringUtil {
 
@@ -188,7 +188,115 @@ public class StringUtil {
         return sb.toString().equals(sb.reverse().toString());
     }
 
+    /**
+     * 最长回文串
+     */
+    public int longestPalindrome(String s) {
+        int sum = s.chars()
+                .boxed()
+                .collect(Collectors.toMap(Function.identity(), v -> 1, Integer::sum))
+                .values()
+                .stream()
+                .mapToInt(i -> i - (i & 1))
+                .sum();
+        return sum < s.length() ? sum + 1 : sum;
+    }
+
+    /**
+     * 给定字符串 s 和 t ，判断 s 是否为 t 的子序列。
+     */
+    public boolean isSubsequence(String s, String t) {
+        int sLen = s.length();
+        int tLen = t.length();
+        if (sLen > tLen) {
+            return false;
+        }
+        if (sLen == 0) {
+            return true;
+        }
+        boolean[][] dp = new boolean[sLen + 1][tLen + 1];
+        for (int i = 0; i < tLen; i++) {
+            dp[0][i] = true;
+        }
+        for (int i = 1; i <= sLen; i++) {
+            for (int j = 1; j <= tLen; j++) {
+                if (s.charAt(i - 1) == t.charAt(j - 1)) {
+                    dp[i][j] = dp[i - 1][j - 1];
+                } else {
+                    dp[i][j] = dp[i][j - 1];
+                }
+            }
+        }
+        return dp[sLen][tLen];
+    }
+
+    /**
+     * 二进制手表
+     */
+    public List<String> readBinaryWatch(int num) {
+        List<String> ans = new ArrayList<>();
+        String[][] hstrs = {{"0"},
+                {"1", "2", "4", "8"},
+                {"3", "5", "6", "9", "10"},
+                {"7", "11"}};
+        String[][] mstrs = {{"00"},
+                {"01", "02", "04", "08", "16", "32"},
+                {"03", "05", "06", "09", "10", "12", "17", "18", "20", "24", "33", "34", "36", "40", "48"},
+                {"07", "11", "13", "14", "19", "21", "22", "25", "26", "28", "35", "37", "38", "41", "42", "44", "49", "50", "52", "56"},
+                {"15", "23", "27", "29", "30", "39", "43", "45", "46", "51", "53", "54", "57", "58"},
+                {"31", "47", "55", "59"}};
+        for (int i = 0; i <= Math.min(3, num); i++) {
+            if (num - i > 5) continue;
+            String[] hstr = hstrs[i];
+            String[] mstr = mstrs[num - i];
+            for (String s : hstr) {
+                for (String value : mstr) {
+                    ans.add(s + ":" + value);
+                }
+            }
+        }
+        return ans;
+    }
+
+    /**
+     * 是否位同构字符串
+     */
+    public boolean isIsomorphic(String s, String t) {
+        return isomorphic(s, t) && isomorphic(t, s);
+    }
+
+    private boolean isomorphic(String s, String t) {
+        if (s.length() != t.length()) {
+            return false;
+        }
+        Map<Character, Character> map = new HashMap<>();
+        for (int i = 0; i < s.length(); i++) {
+            Character c = s.charAt(i);
+            if (map.containsKey(c)) {
+                if (map.get(c) != t.charAt(i)) {
+                    return false;
+                }
+            } else {
+                map.put(c, t.charAt(i));
+            }
+        }
+        return true;
+    }
+
+    public boolean isAnagram(String s, String t) {
+        return s.chars()
+                .boxed()
+                .sorted()
+                .map(Object::toString)
+                .collect(Collectors.joining())
+                .equals(t.chars()
+                        .boxed()
+                        .sorted()
+                        .map(Object::toString)
+                        .collect(Collectors.joining()));
+    }
+
     public static void main(String[] args) {
-        System.out.println(new StringUtil().countCharacters(new String[]{"dyiclysmffuhibgfvapygkorkqllqlvokosagyelotobicwcmebnpznjbirzrzsrtzjxhsfpiwyfhzyonmuabtlwin", "ndqeyhhcquplmznwslewjzuyfgklssvkqxmqjpwhrshycmvrb", "ulrrbpspyudncdlbkxkrqpivfftrggemkpyjl", "boygirdlggnh", "xmqohbyqwagkjzpyawsydmdaattthmuvjbzwpyopyafphx", "nulvimegcsiwvhwuiyednoxpugfeimnnyeoczuzxgxbqjvegcxeqnjbwnbvowastqhojepisusvsidhqmszbrnynkyop", "hiefuovybkpgzygprmndrkyspoiyapdwkxebgsmodhzpx", "juldqdzeskpffaoqcyyxiqqowsalqumddcufhouhrskozhlmobiwzxnhdkidr", "lnnvsdcrvzfmrvurucrzlfyigcycffpiuoo", "oxgaskztzroxuntiwlfyufddl", "tfspedteabxatkaypitjfkhkkigdwdkctqbczcugripkgcyfezpuklfqfcsccboarbfbjfrkxp", "qnagrpfzlyrouolqquytwnwnsqnmuzphne", "eeilfdaookieawrrbvtnqfzcricvhpiv", "sisvsjzyrbdsjcwwygdnxcjhzhsxhpceqz", "yhouqhjevqxtecomahbwoptzlkyvjexhzcbccusbjjdgcfzlkoqwiwue", "hwxxighzvceaplsycajkhynkhzkwkouszwaiuzqcleyflqrxgjsvlegvupzqijbornbfwpefhxekgpuvgiyeudhncv", "cpwcjwgbcquirnsazumgjjcltitmeyfaudbnbqhflvecjsupjmgwfbjo", "teyygdmmyadppuopvqdodaczob", "qaeowuwqsqffvibrtxnjnzvzuuonrkwpysyxvkijemmpdmtnqxwekbpfzs", "qqxpxpmemkldghbmbyxpkwgkaykaerhmwwjonrhcsubchs"}, "usdruypficfbpfbivlrhutcgvyjenlxzeovdyjtgvvfdjzcmikjraspdfp"));
+        System.out.println(new StringUtil().isIsomorphic("aba", "baa"));
     }
 }

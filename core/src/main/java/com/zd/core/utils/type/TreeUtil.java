@@ -158,6 +158,72 @@ public class TreeUtil {
         return hasPathSum(root.left, sum) || hasPathSum(root.right, sum);
     }
 
+    /**
+     * 完美二叉树
+     */
+    public TreeNode invertTree(TreeNode root) {
+        if (root != null) {
+            TreeNode left = root.left;
+            TreeNode right = root.right;
+            root.right = invertTree(left);
+            root.left = invertTree(right);
+        }
+        return root;
+    }
+
+    /**
+     * 最近共同父节点
+     */
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        int pVal = p.val;
+        int qVal = q.val;
+        while (root != null) {
+            if (pVal > root.val && qVal > root.val) {
+                root = root.right;
+            } else if (pVal < root.val && qVal < root.val) {
+                root = root.left;
+            } else {
+                return root;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 二叉树所有路径
+     */
+    public List<String> binaryTreePaths(TreeNode root) {
+        List<List<Integer>> result = new ArrayList<>();
+        if (root != null) {
+            result.addAll(treePaths(root, new ArrayList<>()));
+        }
+        return result.stream()
+                .map(a -> a.stream()
+                        .map(Object::toString)
+                        .collect(Collectors.joining("->")))
+                .collect(Collectors.toList());
+    }
+
+    private List<List<Integer>> treePaths(TreeNode node, List<Integer> list) {
+        List<List<Integer>> result = new ArrayList<>();
+        if (node == null) {
+            result.add(list);
+            return result;
+        }
+        list.add(node.val);
+        if (node.right == null && node.left == null) {
+            result.add(list);
+            return result;
+        }
+        if (node.left != null) {
+            result.addAll(treePaths(node.left, new ArrayList<>(list)));
+        }
+        if (node.right != null) {
+            result.addAll(treePaths(node.right, new ArrayList<>(list)));
+        }
+        return result;
+    }
+
     public class TreeNode {
         int val;
         TreeNode left;

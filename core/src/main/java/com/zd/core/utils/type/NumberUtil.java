@@ -4,6 +4,8 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 
 import java.util.*;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class NumberUtil {
 
@@ -217,7 +219,201 @@ public class NumberUtil {
         return result;
     }
 
+    /**
+     * 判断矩阵重叠
+     */
+    public boolean isRectangleOverlap(int[] rec1, int[] rec2) {
+        return rec1[0] < rec2[2] &&
+                rec1[2] > rec2[0] &&
+                rec1[1] < rec2[3] &&
+                rec1[3] > rec2[1];
+    }
+
+    /**
+     * 单个数,其实的出现2次
+     */
+    public int singleNumber(int[] nums) {
+        int result = 0;
+        for (int num : nums) {
+            result ^= num;
+        }
+        return result;
+    }
+
+    /**
+     * 两数之和
+     */
+    public int[] twoSum(int[] numbers, int target) {
+        for (int i = 0; i < numbers.length; i++) {
+            for (int j = 0; j < numbers.length; j++) {
+                if (i != j && numbers[i] + numbers[j] == target) {
+                    return new int[]{i + 1, j + 1};
+                }
+            }
+        }
+        return new int[]{};
+    }
+
+    /**
+     * Excel
+     */
+    public String convertToTitle(int n) {
+        StringBuilder result = new StringBuilder();
+        while (n > 0) {
+            n -= 1;
+            result.append(Character.toChars('A' + (n % 26)));
+            n /= 26;
+        }
+        result.reverse();
+        return result.toString();
+    }
+
+    /**
+     * Excel
+     */
+    public int titleToNumber(String s) {
+        int n = 0;
+        for (int i = 0; i < s.length(); i++) {
+            n = n * 26 + (s.charAt(i) - 'A' + 1);
+        }
+        return n;
+    }
+
+    /**
+     * 返回乘皆种0的数量
+     */
+    public int trailingZeroes(int n) {
+        int count = 0;
+        while (n > 0) {
+            count += n / 5;
+            n = n / 5;
+        }
+        return count;
+    }
+
+    /**
+     * 给定一个数组，将数组中的元素向右移动 k 个位置
+     */
+    public void rotate(int[] nums, int k) {
+        for (int i = 0; i < k; i++) {
+            int n = nums[nums.length - 1];
+            System.arraycopy(nums, 0, nums, 1, nums.length - 1);
+            nums[0] = n;
+        }
+    }
+
+    /**
+     * 颠倒二进制
+     */
+    public int reverseBits(int n) {
+        int result = 0;
+        for (int i = 31; i >= 0; i--) {
+            result = result | (((n >> (31 - i)) & 1) << i);
+        }
+        return result;
+    }
+
+    public int hammingWeight(int n) {
+        return Integer.bitCount(n);
+    }
+
+    public int rob(int[] nums) {
+        //当前最大值
+        int curMax = 0;
+        //上一个最大值
+        int preMax = 0;
+        for (int num : nums) {
+            int temp = curMax;
+            curMax = Math.max(preMax + num, curMax);
+            preMax = temp;
+        }
+        return curMax;
+    }
+
+    /**
+     * 是否为快乐数
+     */
+    public boolean isHappy(int n) {
+        int p = n, q = getNext(n);
+        while (q != 1) {
+            p = getNext(p);
+            q = getNext(getNext(q));
+            if (p == q) return false;
+        }
+        return true;
+    }
+
+    int getNext(int x) {
+        int n = 0;
+        while (x > 0) {
+            n += (x % 10) * (x % 10);
+            x /= 10;
+        }
+        return n;
+    }
+
+    /**
+     * 获取最小的k位
+     */
+    public int[] getLeastNumbers(int[] arr, int k) {
+        return Arrays.stream(arr)
+                .sorted()
+                .limit(k)
+                .toArray();
+    }
+
+    /**
+     * 获取小于n的质数
+     */
+    public int countPrimes(int n) {
+        if (n < 2) {
+            return 0;
+        }
+        BitSet bit = new BitSet();
+        for (int i = 2; Math.pow(i, 2) < n; i++) {
+            if (!bit.get(i)) {
+                for (int j = i * i; j < n; j += i) {
+                    bit.set(j);
+                }
+            }
+        }
+        return n - 2 - bit.cardinality();
+    }
+
+    /**
+     * 是否是二的幂次
+     */
+    public boolean isPowerOfTwo(int n) {
+        return n >= 1 && Integer.bitCount(n) == 1;
+    }
+
+    /**
+     * 是否为丑数
+     */
+    public boolean isUgly(int num) {
+        while (num > 0) {
+            if (num % 2 == 0) {
+                num = num >> 1;
+                continue;
+            }
+            if (num % 3 == 0) {
+                num /= 3;
+                continue;
+            }
+            if (num % 5 == 0) {
+                num /= 5;
+                continue;
+            }
+            if (num==1){
+                return true;
+            }
+            return false;
+        }
+        return false;
+    }
+
     public static void main(String[] args) {
-        System.out.println(new NumberUtil().maxProfit(new int[]{1, 2, 3, 4, 5}));
+
+        System.out.println(new NumberUtil().isUgly(14));
     }
 }
