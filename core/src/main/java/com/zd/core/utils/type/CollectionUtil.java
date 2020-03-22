@@ -7,6 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.math.BigInteger;
+import java.util.LinkedList;
+import java.util.List;
 
 public class CollectionUtil {
 
@@ -171,7 +176,7 @@ public class CollectionUtil {
     }
 
     public List<Integer> getRow(int rowIndex) {
-        return generate(rowIndex).get(rowIndex - 1);
+       return generate(rowIndex).get(rowIndex-1);
     }
 
     /**
@@ -251,6 +256,38 @@ public class CollectionUtil {
     }
 
     public static void main(String[] args) {
-        System.out.println(new CollectionUtil().containsNearbyDuplicate(new int[]{1, 1, 1, 1, 1}, 1));
+        new CollectionUtil().generate(5);
     }
+
+    /**
+     * 数组+1
+     */
+    public int[] plusOne(int[] digits) {
+        for (int i = digits.length-1; i >= 0; i--) {
+            digits[i]++;
+            digits[i] = digits[i] % 10;
+            if (digits[i] != 0) return digits;
+        }
+        digits = new int[digits.length + 1];
+        digits[0] = 1;
+        return digits;
+    }
+
+    /**
+     * 给定两个二进制字符串，返回他们的和（用二进制表示）。
+     */
+    public String addBinary(String a, String b) {
+        BigInteger x = new BigInteger(a, 2);
+        BigInteger y = new BigInteger(b, 2);
+        BigInteger zero = new BigInteger("0", 2);
+        BigInteger carry, answer;
+        while (y.compareTo(zero) != 0) {
+            answer = x.xor(y);
+            carry = x.and(y).shiftLeft(1);
+            x = answer;
+            y = carry;
+        }
+        return x.toString(2);
+    }
+
 }

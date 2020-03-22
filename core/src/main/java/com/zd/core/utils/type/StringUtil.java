@@ -202,6 +202,7 @@ public class StringUtil {
         return sum < s.length() ? sum + 1 : sum;
     }
 
+
     /**
      * 给定字符串 s 和 t ，判断 s 是否为 t 的子序列。
      */
@@ -296,7 +297,29 @@ public class StringUtil {
                         .collect(Collectors.joining()));
     }
 
+    /**
+     * 最长回文串
+     */
+    public String longestPrefix(String s) {
+        StringBuilder a = new StringBuilder();
+        int k = 1;
+        for (int i = 0; i < s.length() && k < s.length(); i++) {
+            for (; k < s.length(); ) {
+                k++;
+                if ((s.charAt(i) ^ s.charAt(k - 1)) == 0) {
+                    a.append(s.charAt(i));
+                    if (i + 1 < s.length() && k < s.length() && ((s.charAt(i + 1) ^ s.charAt(k)) != 0)) {
+                        a = new StringBuilder();
+                        i = -1;
+                    }
+                    break;
+                }
+            }
+        }
+        return a.toString();
+    }
+
     public static void main(String[] args) {
-        System.out.println(new StringUtil().isIsomorphic("aba", "baa"));
+        System.out.println(new StringUtil().longestPrefix("acccbaaacccbaac"));
     }
 }

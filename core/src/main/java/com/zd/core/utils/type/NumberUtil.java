@@ -2,8 +2,10 @@ package com.zd.core.utils.type;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
+import io.swagger.models.auth.In;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -404,7 +406,7 @@ public class NumberUtil {
                 num /= 5;
                 continue;
             }
-            if (num==1){
+            if (num == 1) {
                 return true;
             }
             return false;
@@ -412,8 +414,162 @@ public class NumberUtil {
         return false;
     }
 
-    public static void main(String[] args) {
 
-        System.out.println(new NumberUtil().isUgly(14));
+    public int mySqrt(int x) {
+        if (x < 2) {
+            return x;
+        }
+        int left = (int) Math.pow(Math.E, 0.5 * Math.log(x));
+        int right = left + 1;
+        return (long) right * right > x ? left : right;
+    }
+
+    public int findTheDistanceValue(int[] arr1, int[] arr2, int d) {
+        int num = 0;
+        for (int value : arr1) {
+            boolean flag = true;
+            for (int i : arr2) {
+                if (Math.abs(value - i) <= d) {
+                    flag = false;
+                    break;
+                }
+            }
+            if (flag) {
+                num++;
+            }
+        }
+        return num;
+    }
+
+    public int getKth(int lo, int hi, int k) {
+        return IntStream.range(lo, hi + 1)
+                .boxed()
+                .sorted(Comparator.<Integer, Integer>comparing(i -> {
+                    int count = 0;
+                    while (i != 1) {
+                        if (i % 2 == 0) {
+                            i = i >> 1;
+                        } else {
+                            i = 3 * i + 1;
+                        }
+                        count++;
+                    }
+                    return count;
+                }).thenComparing(Comparator.naturalOrder()))
+                .skip(k - 1)
+                .findFirst()
+                .get();
+    }
+
+    public int maxSizeSlices(int[] slices) {
+        int[] a = new int[slices.length - 1];
+        int[] b = new int[slices.length - 1];
+        System.arraycopy(slices, 0, a, 0, a.length);
+        System.arraycopy(slices, 1, b, 0, b.length);
+        return Math.max(slices(a), slices(b));
+    }
+
+    public int slices(int[] slices) {
+        int[][] dp = new int[slices.length / 3 + 1][slices.length];
+        dp[0] = slices;
+        for (int i = 1; i < slices.length / 3 + 1; i++) {
+            int maxValue = 0;
+            for (int j = 0; j < slices.length; ++j) {
+                if (j >= 2) maxValue = Math.max(maxValue, dp[i - 1][j - 2]);
+                dp[i][j] = maxValue + slices[j];
+            }
+        }
+        return Arrays.stream(dp[slices.length / 3]).max().getAsInt();
+    }
+
+    public int maxNumberOfFamilies(int n, int[][] reservedSeats) {
+        int num = 0;
+        int j = 0;
+        int i = 1;
+        Arrays.sort(reservedSeats, Comparator.comparing(ints -> ints[0]));
+        boolean flag = true;
+        boolean[] ret = new boolean[11];
+        while (j < reservedSeats.length) {
+            if (reservedSeats[j][0] == i) {
+                flag = false;
+                ret[reservedSeats[j][1] - 1] = true;
+                j++;
+                if (j != reservedSeats.length) {
+                    continue;
+                }
+            }
+            i++;
+            if (flag) {
+                num += 2;
+                continue;
+            }
+            flag = true;
+            boolean b = !ret[1] && !ret[2] && !ret[3] && !ret[4];
+            boolean c = !ret[5] && !ret[6] && !ret[7] && !ret[8];
+            if (b && c) {
+                num += 2;
+                ret = new boolean[11];
+                continue;
+            }
+            if ((b)) {
+                num++;
+                ret = new boolean[11];
+                continue;
+            }
+            if (c) {
+                num++;
+                ret = new boolean[11];
+                continue;
+            }
+            if ((!ret[3] && !ret[4] && !ret[5] && !ret[6])) {
+                num++;
+            }
+            ret = new boolean[11];
+        }
+        if (n >= i) {
+            num = (n - i + 1) * 2 + num;
+        }
+        return num;
+    }
+
+    public int[] createTargetArray(int[] nums, int[] index) {
+        List<Integer> target = new ArrayList<>();
+        for (int i = 0; i < index.length; i++) {
+            target.add(index[i], nums[i]);
+        }
+        return target.stream().mapToInt(Integer::intValue).toArray();
+    }
+
+    public int sumFourDivisors(int[] nums) {
+        int result = 0;
+        for (int num : nums) {
+            Set<Integer> ints = divisorsNum(num);
+            if (ints.size() == 2) {
+                result += ints.stream().reduce(Integer::sum).get()+num+1;
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 求因数个数
+     */
+    private Set<Integer> divisorsNum(int n) {
+        int num = n;
+        Set<Integer> set = new HashSet<>();
+        for (int i = 2; i < n / 2; i++) {
+            if (n % i == 0) {
+                set.add(i);
+                set.add(num/i);
+            }
+            if (set.size()>2){
+                break;
+            }
+        }
+        return set;
+    }
+    
+    public static void main(String[] args) {
+        System.out.println(new NumberUtil().sumFourDivisors(new int[]{90779,36358,90351,75474,32986}));
     }
 }
