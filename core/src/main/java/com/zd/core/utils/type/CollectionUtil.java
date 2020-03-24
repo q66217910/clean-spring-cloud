@@ -176,7 +176,7 @@ public class CollectionUtil {
     }
 
     public List<Integer> getRow(int rowIndex) {
-       return generate(rowIndex).get(rowIndex-1);
+        return generate(rowIndex).get(rowIndex - 1);
     }
 
     /**
@@ -239,7 +239,7 @@ public class CollectionUtil {
         result[2 * nums.length] = nums.length;
         int s = 0;
         for (int i = 0; i < result.length; i++) {
-              s^=result[i];
+            s ^= result[i];
         }
         return s;
     }
@@ -248,22 +248,19 @@ public class CollectionUtil {
         for (int lastNonZeroFoundAt = 0, cur = 0; cur < nums.length; cur++) {
             if (nums[cur] != 0) {
                 int i = lastNonZeroFoundAt++;
-                int temp =  nums[i];
-                nums[i] =  nums[cur];
+                int temp = nums[i];
+                nums[i] = nums[cur];
                 nums[cur] = temp;
             }
         }
     }
 
-    public static void main(String[] args) {
-        new CollectionUtil().generate(5);
-    }
 
     /**
      * 数组+1
      */
     public int[] plusOne(int[] digits) {
-        for (int i = digits.length-1; i >= 0; i--) {
+        for (int i = digits.length - 1; i >= 0; i--) {
             digits[i]++;
             digits[i] = digits[i] % 10;
             if (digits[i] != 0) return digits;
@@ -288,6 +285,54 @@ public class CollectionUtil {
             y = carry;
         }
         return x.toString(2);
+    }
+
+    /**
+     * 将数组分成和相等的三个部分
+     */
+    public boolean canThreePartsEqualSum(int[] A) {
+        //取和
+        int sum = Arrays.stream(A).reduce(Integer::sum).orElse(0);
+        //若和不是3的倍数则不可能分
+        if (sum % 3 == 0) {
+            int num = sum / 3;
+            int value = 0;
+            int count = 0;
+            for (int item : A) {
+                //寻找索引i,j
+                value += item;
+                if (value == num) {
+                    value = 0;
+                    count++;
+                }
+            }
+            if (count >= 3) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 数组交集(一个数出现一次)
+     */
+    public int[] intersection(int[] nums1, int[] nums2) {
+        HashSet<Integer> set = new HashSet<>();
+        for (int num : nums1) set.add(num);
+        ArrayList<Integer> arr = new ArrayList<>();
+        for (int num : nums2) {
+            if (set.contains(num)) {
+                arr.add(num);
+                set.remove(num);
+            }
+        }
+        int[] res = new int[arr.size()];
+        for (int i = 0; i < arr.size(); i++) res[i] = arr.get(i);
+        return res;
+    }
+
+    public static void main(String[] args) {
+        new CollectionUtil().canThreePartsEqualSum(new int[]{10, -10, 10, -10, 10, -10, 10, -10});
     }
 
 }

@@ -1,9 +1,6 @@
 package com.zd.core.utils.type;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class LinkUtil {
@@ -74,6 +71,7 @@ public class LinkUtil {
      */
     public boolean isPalindrome(ListNode head) {
         List<Integer> list = new ArrayList<>();
+        
         while (head != null) {
             list.add(head.val);
             head = head.next;
@@ -84,6 +82,18 @@ public class LinkUtil {
             }
         }
         return true;
+    }
+
+    /**
+     * 获取链表中间节点
+     */
+    public ListNode middleNode(ListNode head) {
+        List<ListNode> list = new ArrayList<>();
+        while (head != null) {
+            list.add(head);
+            head = head.next;
+        }
+        return list.stream().skip(list.size() / 2 ).findFirst().get();
     }
 
     public void deleteNode(ListNode node) {

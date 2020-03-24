@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import io.swagger.models.auth.In;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -545,7 +546,7 @@ public class NumberUtil {
         for (int num : nums) {
             Set<Integer> ints = divisorsNum(num);
             if (ints.size() == 2) {
-                result += ints.stream().reduce(Integer::sum).get()+num+1;
+                result += ints.stream().reduce(Integer::sum).get() + num + 1;
             }
         }
         return result;
@@ -560,16 +561,77 @@ public class NumberUtil {
         for (int i = 2; i < n / 2; i++) {
             if (n % i == 0) {
                 set.add(i);
-                set.add(num/i);
+                set.add(num / i);
             }
-            if (set.size()>2){
+            if (set.size() > 2) {
                 break;
             }
         }
         return set;
     }
+
+    public boolean isPowerOfThree(int n) {
+        if (n == 1) {
+            return true;
+        }
+        while (n > 0) {
+            if (n % 4 == 0) {
+                n /= 4;
+                if (n == 1) {
+                    return true;
+                }
+            } else {
+                return false;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 不连续最大值
+     */
+    public int massage(int[] nums) {
+        if (nums.length == 1) {
+            return nums[0];
+        }
+        int[][] dp = new int[nums.length / 2 + 1][nums.length];
+
+        dp[0] = nums;
+
+        int result = 0;
+
+        for (int i = 1; i < nums.length / 2 + 1; i++) {
+            int maxValue = 0;
+            for (int j = 0; j < nums.length; j++) {
+                if (j >= 2) maxValue = Math.max(maxValue, dp[i - 1][j - 2]);
+                dp[i][j] = maxValue + nums[j];
+                result = Math.max(dp[i][j], result);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 判断是否是完全平方数
+     */
+    public boolean isPerfectSquare(int num) {
+        int sqrt = (int) Math.sqrt(num);
+        return sqrt * sqrt == num;
+    }
+
+    public int getSum(int a, int b) {
+        while(b != 0){
+            int temp = a ^ b;
+            b = (a & b) << 1;
+            a = temp;
+        }
+        
+        return a;
+    }
+
     
+
     public static void main(String[] args) {
-        System.out.println(new NumberUtil().sumFourDivisors(new int[]{90779,36358,90351,75474,32986}));
+        System.out.println(new NumberUtil().getSum(16,8));
     }
 }

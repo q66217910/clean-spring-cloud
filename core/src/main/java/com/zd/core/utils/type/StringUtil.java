@@ -2,6 +2,7 @@ package com.zd.core.utils.type;
 
 import com.google.common.collect.ImmutableMap;
 
+import java.math.BigInteger;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -319,7 +320,120 @@ public class StringUtil {
         return a.toString();
     }
 
+    /**
+     * 单词规律
+     */
+    public boolean wordPattern(String pattern, String str) {
+        Map<Character, Integer> map = new HashMap<>();
+        StringBuilder sb = new StringBuilder();
+        int index = 1;
+        for (int i = 0; i < pattern.length(); i++) {
+            if (map.containsKey(pattern.charAt(i))) {
+                Integer value = map.get(pattern.charAt(i));
+                sb.append(value);
+            } else {
+                sb.append(index);
+                map.put(pattern.charAt(i), index++);
+            }
+        }
+
+        Map<String, Integer> map2 = new HashMap<>();
+        StringBuilder s = new StringBuilder();
+        int index1 = 1;
+        String[] split = str.split(" ");
+        for (String item : split) {
+            if (map2.containsKey(item)) {
+                Integer value = map2.get(item);
+                s.append(value);
+            } else {
+                s.append(index1);
+                map2.put(item, index1++);
+            }
+        }
+
+        return sb.toString().equals(s.toString());
+    }
+
+    public String getHint(String secret, String guess) {
+        int bulls = 0;
+        int cows = 0;
+        int[] a = new int[10];
+        int[] b = new int[10];
+        for (int i = 0; i < secret.length(); i++) {
+            a[secret.charAt(i) - '0']++;
+            b[guess.charAt(i) - '0']++;
+            if ((secret.charAt(i) ^ guess.charAt(i)) == 0) {
+                bulls++;
+            }
+        }
+        for (int i = 0; i < a.length; i++) {
+            cows += Math.min(a[i], b[i]);
+        }
+        return bulls + "A" + (cows - bulls) + "B";
+    }
+
+    /**
+     * 字符串最大公因子
+     */
+    public String gcdOfStrings(String str1, String str2) {
+        //数学法 （首尾相加相等，说明有公约字符串）
+        if ((str1 + str2).equals(str2 + str1)) {
+            //求长度的最大公约数就是最大的最大公因子
+            return str2.substring(0, new BigInteger(String.valueOf(str1.length())).
+                    gcd(new BigInteger(String.valueOf(str2.length()))).intValue());
+        }
+        return "";
+    }
+
+    /**
+     * 反转字符串 (双指针)
+     */
+    public void reverseString(char[] s) {
+        int left = 0;
+        int right = s.length - 1;
+        while (left < right) {
+            char temp = s[left];
+            s[left] = s[right];
+            s[right] = temp;
+            left++;
+            right--;
+        }
+    }
+
+    /**
+     * 反转字符串中的元音
+     */
+    public String reverseVowels(String s) {
+        char[] chars = s.toCharArray();
+        int left = 0;
+        int right = s.length() - 1;
+        boolean flagL, flagR;
+        while (left < right) {
+            flagL = isVowels(s.charAt(left));
+            flagR = isVowels(s.charAt(right));
+            if (!flagL) {
+                left++;
+            }
+            if (!flagR) {
+                right--;
+            }
+            if (flagL && flagR) {
+                char temp = chars[left];
+                chars[left] = chars[right];
+                chars[right] = temp;
+                left++;
+                right--;
+            }
+        }
+        return new String(chars);
+    }
+
+    private boolean isVowels(char c) {
+        return c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u'
+                ||c == 'A' || c == 'E' || c == 'I' || c == 'O' || c == 'U';
+    }
+
     public static void main(String[] args) {
-        System.out.println(new StringUtil().longestPrefix("acccbaaacccbaac"));
+        System.out.println(new StringUtil().gcdOfStrings("ABABAB", "ABAB"));
     }
 }
