@@ -1,14 +1,10 @@
 package com.zd.core.utils.type;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
-import io.swagger.models.auth.In;
 
+import java.math.BigInteger;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Function;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 public class NumberUtil {
 
@@ -620,18 +616,80 @@ public class NumberUtil {
     }
 
     public int getSum(int a, int b) {
-        while(b != 0){
+        while (b != 0) {
             int temp = a ^ b;
             b = (a & b) << 1;
             a = temp;
         }
-        
         return a;
     }
 
-    
+    /**
+     * 计算表面积
+     */
+    public int surfaceArea(int[][] grid) {
+        int result = 0;
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid.length; j++) {
+                //算上所有面
+                if (grid[i][j] > 0) {
+                    result += (grid[i][j] << 2) + 2;
+                    result -= i > 0 ? Math.min(grid[i][j], grid[i - 1][j]) << 1 : 0;
+                    result -= j > 0 ? Math.min(grid[i][j], grid[i][j - 1]) << 1 : 0;
+                }
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 最长上升子序列
+     */
+    public int lengthOfLIS(int[] nums) {
+        int len = 1, n = nums.length;
+        if (n == 0) {
+            return 0;
+        }
+        int[] d = new int[n + 1];
+        d[len] = nums[0];
+        //dp为最长位的最小值
+        for (int i = 1; i < n; ++i) {
+            if (nums[i] > d[len]) {
+                //若当前数大于dp最大位的值，直接设置当前值位dp下一位的值
+                d[++len] = nums[i];
+            } else {
+                //否则二分法,找出小当前值的最大值
+                int l = 1, r = len, pos = 0;
+                while (l <= r) {
+                    int mid = (l + r) >> 1;
+                    if (d[mid] < nums[i]) {
+                        pos = mid;
+                        l = mid + 1;
+                    } else {
+                        r = mid - 1;
+                    }
+                }
+                d[pos + 1] = nums[i];
+            }
+        }
+        return len;
+    }
+
+    public boolean canMeasureWater(int x, int y, int z) {
+        //两个都满还不够
+        if (x + y < z) {
+            return false;
+        }
+        //如果有空瓶，除非z是0，或者z刚好等于那个瓶子
+        if (x == 0 || y == 0) {
+            return z == 0 || x + y == z;
+        }
+        //z如果能整除 x,y的最大公约数
+        return z % new BigInteger(String.valueOf(x))
+                .gcd(new BigInteger(String.valueOf(y))).intValue() == 0;
+    }
 
     public static void main(String[] args) {
-        System.out.println(new NumberUtil().getSum(16,8));
+        System.out.println(new NumberUtil().canMeasureWater(3, 5, 4));
     }
 }
