@@ -224,6 +224,33 @@ public class TreeUtil {
         return result;
     }
 
+    /**
+     * 左叶子之和
+     */
+    public int sumOfLeftLeaves(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        return findLeftLeaves(root, false);
+    }
+
+    /**
+     * 寻找左节点
+     */
+    public int findLeftLeaves(TreeNode node, boolean isLeft) {
+        int result = 0;
+        if (node.left != null) {
+            result += findLeftLeaves(node.left, true);
+        }
+        if (node.right != null) {
+            result += findLeftLeaves(node.right, false);
+        }
+        if (node.right == null && node.left == null && isLeft) {
+            return node.val;
+        }
+        return result;
+    }
+
     public class TreeNode {
         int val;
         TreeNode left;

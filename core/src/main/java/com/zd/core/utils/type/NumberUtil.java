@@ -1,9 +1,12 @@
 package com.zd.core.utils.type;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 
 import java.math.BigInteger;
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class NumberUtil {
@@ -689,7 +692,157 @@ public class NumberUtil {
                 .gcd(new BigInteger(String.valueOf(y))).intValue() == 0;
     }
 
+    public int numRookCaptures(char[][] board) {
+        int a = 0, b = 0, result = 0;
+        int[] dx = new int[]{0, 1, 0, -1};
+        int[] dy = new int[]{1, 0, -1, 0};
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board.length; j++) {
+                if ('R' == board[i][j]) {
+                    a = i;
+                    b = j;
+                    break;
+                }
+            }
+        }
+        for (int i = 0; i < 4; ++i) {
+            for (int step = 0; ; ++step) {
+                int tx = a + step * dx[i];
+                int ty = b + step * dy[i];
+                if (tx < 0 || tx >= 8 || ty < 0 || ty >= 8 || board[tx][ty] == 'B')
+                    break;
+                if (board[tx][ty] == 'p') {
+                    result++;
+                    break;
+                }
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 计算岛屿。广度优先算法
+     */
+    public int maxAreaOfIsland(int[][] grid) {
+        int result = 0;
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[0].length; j++) {
+                int num = 0;
+                Stack<Integer> stacki = new Stack<>();
+                Stack<Integer> stackj = new Stack<>();
+                stacki.push(i);
+                stackj.push(j);
+                while (!stacki.empty()) {
+                    int curi = stacki.pop();
+                    int curj = stackj.pop();
+                    //若当前节点不为1直接跳过
+                    if (curi < 0 ||
+                            curj < 0 ||
+                            curi == grid.length ||
+                            curj == grid[0].length ||
+                            grid[curi][curj] != 1) {
+                        continue;
+                    }
+                    num++;
+                    //当前点设置成0
+                    grid[curi][curj] = 0;
+                    int[] di = {0, 0, 1, -1};
+                    int[] dj = {1, -1, 0, 0};
+                    //查看当前点的周围四个点
+                    for (int k = 0; k < 4; k++) {
+                        stacki.push(curi + di[k]);
+                        stackj.push(curj + dj[k]);
+                    }
+                }
+                result = Math.max(result, num);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 唯一值最小增量
+     */
+    public int minIncrementForUnique(int[] A) {
+        Lists.<Integer>newArrayList().stream().max(Comparator.comparing(Function.identity())).orElse(-1);
+        int result = 0, token = 0;   //重复次数
+        //先进行排序
+        Arrays.sort(A);
+        for (int i = 1; i < A.length; i++) {
+            if (A[i - 1] == A[i]) {
+                //若重复，token+1
+                token++;
+                //操作次数减去当前数值
+                result -= A[i];
+            } else {
+                //若不重复,
+                int give = Math.min(token, A[i] - A[i - 1] - 1);
+                //在A[i-1]-A[i]区间中,重复数要修改的次数
+                result += give * (give + 1) / 2 + give * A[i - 1];
+                //重复次数减少
+                token -= give;
+            }
+        }
+        //再算一次，防止有重复次数不为0
+        if (A.length > 0) {
+            result += token * (token + 1) / 2 + token * A[A.length - 1];
+        }
+        return result;
+    }
+
+    /**
+     * 猜数字
+     */
+    public int guessNumber(int n, int pick) {
+        int left = 0, right = n, result = 0;
+        while (left < right) {
+            n = left + ((right - left) >> 1);
+            result = guess(n, pick);
+            if (result == -1) {
+                left = n + 1;
+            }
+            if (result == 1) {
+                right = n - 1;
+            }
+            if (result == 0) {
+                return n;
+            }
+        }
+        return n;
+    }
+
+    private int guess(int n, int pick) {
+        if (n == pick) {
+            return 0;
+        }
+        return pick > n ? -1 : 1;
+    }
+
+    /**
+     * 10进制转16进制
+     */
+    public String toHex(int num) {
+        if (num == 0) {
+            return "0";
+        }
+        char[] letter = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
+        StringBuilder sb = new StringBuilder();
+        for (int i = 7; i >= 0; i--) {
+            //依次求4位
+            int value = (num >>> (4 * i)) & 15;
+            if (value == 0) {
+                if (sb.length() == 0) {
+                    continue;
+                }
+                sb.append("0");
+            } else {
+                sb.append(letter[value]);
+            }
+        }
+        return sb.toString();
+    }
+
     public static void main(String[] args) {
-        System.out.println(new NumberUtil().canMeasureWater(3, 5, 4));
+        System.out.println(new NumberUtil().toHex(16));
     }
 }

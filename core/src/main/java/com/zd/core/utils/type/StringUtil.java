@@ -430,10 +430,53 @@ public class StringUtil {
 
     private boolean isVowels(char c) {
         return c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u'
-                ||c == 'A' || c == 'E' || c == 'I' || c == 'O' || c == 'U';
+                || c == 'A' || c == 'E' || c == 'I' || c == 'O' || c == 'U';
+    }
+
+    /**
+     * 子符串
+     */
+    public boolean canConstruct(String ransomNote, String magazine) {
+        if (magazine.length() < ransomNote.length()) return false;
+        int[] caps = new int[26];
+        for (char c : ransomNote.toCharArray()) {
+            //从上个字符的位置找字符
+            int index = magazine.indexOf(c, caps[c - 'a']);
+            if (index == -1)
+                return false;
+            //记录当前字符的存在的index
+            caps[c - 97] = index + 1;
+        }
+        return true;
+    }
+
+    /**
+     * 字符串中的第一个唯一字符
+     */
+    public int firstUniqChar(String s) {
+        Map<Integer, Long> map = s.chars()
+                .boxed()
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+        for (int i = 0; i < s.length(); i++) {
+            if (map.get((int) s.charAt(i)) == 1) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public char findTheDifference(String s, String t) {
+        int result = 0;
+        for (char c : s.toCharArray()) {
+            result ^= c;
+        }
+        for (char c : t.toCharArray()) {
+            result ^= c;
+        }
+        return (char) result;
     }
 
     public static void main(String[] args) {
-        System.out.println(new StringUtil().gcdOfStrings("ABABAB", "ABAB"));
+        System.out.println(new StringUtil().firstUniqChar("aadadaad"));
     }
 }
