@@ -842,7 +842,87 @@ public class NumberUtil {
         return sb.toString();
     }
 
+    public boolean hasGroupsSizeX(int[] deck) {
+        Map<Integer, Long> map = Arrays.stream(deck)
+                .boxed()
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+        return map.values()
+                .stream()
+                .reduce((a, b) -> new BigInteger(String.valueOf(a)).gcd(new BigInteger(String.valueOf(b))).longValue())
+                .orElse(0L) >= 2;
+    }
+
+    public List<String> fizzBuzz(int n) {
+        return IntStream.range(1, n + 1).mapToObj(i -> {
+            if (i % 3 == 0 && i % 5 == 0) return "FizzBuzz";
+            if (i % 3 == 0) return "Fizz";
+            if (i % 5 == 0) return "Buzz";
+            return String.valueOf(i);
+        }).collect(Collectors.toList());
+    }
+
+    /**
+     * 第K大的数,堆排序
+     */
+    public int thirdMax(int[] nums) {
+        List<Integer> collect = Arrays.stream(nums)
+                .distinct()
+                .sorted()
+                .boxed()
+                .collect(Collectors.toList());
+        return collect.size() > 2 ? collect.get(2) : collect.get(collect.size() - 1);
+    }
+
+    /**
+     * 完全二叉树特性
+     * 1.若i为奇数且i>1，那么tree的左兄弟为tree[i-1]；
+     * 2.若i为偶数且i<n，那么tree的右兄弟为tree[i+1]；
+     * 3.若i>1，tree的父亲节点为tree[i div 2]；
+     * 4.若2*i<=n，那么tree的左孩子为tree[2*i]；若2*i+1<=n，那么tree的右孩子为tree[2*i+1]；
+     * <p>
+     * 构建大顶堆
+     */
+    public void heapSort(int[] arr) {
+        //一个二叉树的深度为arr.length /2，arr.length /2-1为寻找非叶子节点
+        for (int i = arr.length / 2 - 1; i >= 0; i--) {
+            //判断当前节点是否存在左子节点&&若当前节点小于左节点
+            if ((2 * i + 1) < arr.length && arr[i] < arr[2 * i + 1]) {
+                //交换位置
+                int temp = arr[i];
+                arr[i] = arr[2 * i + 1];
+                arr[2 * i + 1] = temp;
+                //交换结束，判断是否满足左子树是否满足大顶堆 ,即当前节点大于两个子节点
+                if ((2 * (2 * i + 1) + 1 < arr.length
+                        && arr[2 * i + 1] < arr[2 * (2 * i + 1) + 1])
+                        || (2 * (2 * i + 1) + 2 < arr.length
+                        && arr[2 * i + 1] < arr[2 * (2 * i + 1) + 2])) {
+                    //不满足,则调用一次更换右节点
+                    heapSort(arr);
+                }
+            }
+        }
+    }
+
+    /**
+     * 两个字符串数字相加
+     */
+    public String addStrings(String num1, String num2) {
+        StringBuilder sb = new StringBuilder();
+        int i = num1.length() - 1, j = num2.length() - 1, carry = 0;
+        while (i >= 0 || j >= 0) {
+            int n1 = i >= 0 ? num1.charAt(i) - '0' : 0;
+            int n2 = j >= 0 ? num2.charAt(j) - '0' : 0;
+            int tmp = n1 + n2 + carry;
+            carry = tmp / 10;
+            sb.append(tmp % 10);
+            i--;
+            j--;
+        }
+        if (carry == 1) sb.append(1);
+        return sb.reverse().toString();
+    }
+
     public static void main(String[] args) {
-        System.out.println(new NumberUtil().toHex(16));
+        System.out.println(new NumberUtil().addStrings("0", "9"));
     }
 }

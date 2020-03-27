@@ -251,13 +251,70 @@ public class TreeUtil {
         return result;
     }
 
-    public class TreeNode {
+    /**
+     * 路劲数 ==sum
+     */
+    public int pathSum(TreeNode root, int sum) {
+        // key是前缀和, value是大小为key的前缀和出现的次数
+        Map<Integer, Integer> prefixSumCount = new HashMap<>();
+        // 前缀和为0的一条路径
+        prefixSumCount.put(0, 1);
+        return recursionPathSum(root, prefixSumCount, sum, 0);
+    }
+
+    private int recursionPathSum(TreeNode node, Map<Integer, Integer> prefixSumCount, int target, int currSum) {
+        // 1.递归终止条件
+        if (node == null) {
+            return 0;
+        }
+        // 2.本层要做的事情
+        int res = 0;
+        //当前路径的和
+        currSum += node.val;
+        //currSum-target相当于找路径的起点
+        res += prefixSumCount.getOrDefault(currSum - target, 0);
+        //更新路径上当前节点前缀和的个数
+        prefixSumCount.put(currSum, prefixSumCount.getOrDefault(currSum, 0) + 1);
+
+        res += recursionPathSum(node.left, prefixSumCount, target, currSum);
+        res += recursionPathSum(node.right, prefixSumCount, target, currSum);
+
+        //回到本层，恢复状态，去除当前节点的前缀和数量
+        prefixSumCount.computeIfPresent(currSum, (k, v) -> --v);
+        return res;
+    }
+
+    public static void main(String[] args) {
+        new TreeUtil().pathSum(new TreeNode().build(new int[]{1,2,3,4}), 5);
+    }
+
+    public static class TreeNode {
         int val;
         TreeNode left;
         TreeNode right;
 
         TreeNode(int x) {
             val = x;
+        }
+
+        TreeNode() {
+
+        }
+
+        TreeNode build(int[] arr) {
+           return createBinaryTreeByArray(arr, 0);
+        }
+
+        private TreeNode createBinaryTreeByArray(int[] array, int index) {
+            TreeNode tn = null;
+            if (index < array.length) {
+                int value = array[index];
+                tn = new TreeNode(value);
+                tn.left = createBinaryTreeByArray(array, 2 * index + 1);
+                tn.right = createBinaryTreeByArray(array, 2 * index + 2);
+                return tn;
+            }
+            return tn;
         }
     }
 
