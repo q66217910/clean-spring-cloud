@@ -1,5 +1,7 @@
 package com.zd.core.utils.type;
 
+import com.zd.core.utils.structure.NTree;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -284,8 +286,60 @@ public class TreeUtil {
         return res;
     }
 
+    /**
+     * 查找和为k
+     */
+    public boolean findTarget(TreeNode root, int k) {
+        Set<Integer> set = new HashSet<>();
+        return findTarget(root, k, set);
+    }
+
+    private boolean findTarget(TreeNode root, int k, Set<Integer> set) {
+        if (root == null) return false;
+        if (set.contains(k - root.val)) return true;
+        set.add(root.val);
+        return findTarget(root.left, k, set) || findTarget(root.right, k, set);
+    }
+
+    /**
+     * 堂兄弟节点
+     */
+    public boolean isCousins(TreeNode root, int x, int y) {
+        if (root == null) {
+            return false;
+        }
+        Queue<TreeNode> queue = new ArrayDeque<>();
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            Queue<TreeNode> newQueue = new ArrayDeque<>();
+            List<Integer> list = new ArrayList<>();
+            for (int i = queue.size(); i > 0; i--) {
+                TreeNode cur = queue.poll();
+                if (cur != null) {
+                    if (cur.left != null) {
+                        newQueue.add(cur.left);
+                    }
+                    if (cur.right != null) {
+                        newQueue.add(cur.right);
+                    }
+                    list.add(cur.val);
+                    if (cur.left != null&&cur.right != null){
+                        if ((cur.left.val==x&&cur.right.val==y)||cur.right.val==x&&cur.left.val==y){
+                            return false;
+                        }
+                    }
+                }
+            }
+            if (list.contains(x) && list.contains(y)) {
+                return true;
+            }
+            queue = newQueue;
+        }
+        return false;
+    }
+
     public static void main(String[] args) {
-        new TreeUtil().pathSum(new TreeNode().build(new int[]{1,2,3,4}), 5);
+        new TreeUtil().isCousins(new TreeNode().build(new int[]{1, 2, 3, 0, 4}), 2, 3);
     }
 
     public static class TreeNode {
@@ -302,7 +356,7 @@ public class TreeUtil {
         }
 
         TreeNode build(int[] arr) {
-           return createBinaryTreeByArray(arr, 0);
+            return createBinaryTreeByArray(arr, 0);
         }
 
         private TreeNode createBinaryTreeByArray(int[] array, int index) {

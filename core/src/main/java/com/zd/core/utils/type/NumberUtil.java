@@ -243,20 +243,6 @@ public class NumberUtil {
     }
 
     /**
-     * 两数之和
-     */
-    public int[] twoSum(int[] numbers, int target) {
-        for (int i = 0; i < numbers.length; i++) {
-            for (int j = 0; j < numbers.length; j++) {
-                if (i != j && numbers[i] + numbers[j] == target) {
-                    return new int[]{i + 1, j + 1};
-                }
-            }
-        }
-        return new int[]{};
-    }
-
-    /**
      * Excel
      */
     public String convertToTitle(int n) {
@@ -920,6 +906,33 @@ public class NumberUtil {
         }
         if (carry == 1) sb.append(1);
         return sb.reverse().toString();
+    }
+
+    /**
+     * 第n个剩下的数(约瑟夫环)
+     */
+    public int lastRemaining(int n, int m) {
+        int f = 0;
+        for (int i = 2; i != n + 1; ++i)
+            f = (m + f) % i;
+        return f;
+    }
+
+    /**
+     * 两数之和
+     */
+    public int[] twoSum(int[] numbers, int target) {
+        int low = 0, high = numbers.length - 1;
+        while (low < high) {
+            int sum = numbers[low] + numbers[high];
+            if (sum == target)
+                return new int[]{low + 1, high + 1};
+            else if (sum < target)
+                ++low;
+            else
+                --high;
+        }
+        return new int[]{-1, -1};
     }
 
     public static void main(String[] args) {
