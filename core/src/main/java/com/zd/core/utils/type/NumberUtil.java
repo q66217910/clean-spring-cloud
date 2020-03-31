@@ -868,24 +868,55 @@ public class NumberUtil {
      * <p>
      * 构建大顶堆
      */
-    public void heapSort(int[] arr) {
-        //一个二叉树的深度为arr.length /2，arr.length /2-1为寻找非叶子节点
-        for (int i = arr.length / 2 - 1; i >= 0; i--) {
-            //判断当前节点是否存在左子节点&&若当前节点小于左节点
-            if ((2 * i + 1) < arr.length && arr[i] < arr[2 * i + 1]) {
-                //交换位置
-                int temp = arr[i];
-                arr[i] = arr[2 * i + 1];
-                arr[2 * i + 1] = temp;
-                //交换结束，判断是否满足左子树是否满足大顶堆 ,即当前节点大于两个子节点
-                if ((2 * (2 * i + 1) + 1 < arr.length
-                        && arr[2 * i + 1] < arr[2 * (2 * i + 1) + 1])
-                        || (2 * (2 * i + 1) + 2 < arr.length
-                        && arr[2 * i + 1] < arr[2 * (2 * i + 1) + 2])) {
-                    //不满足,则调用一次更换右节点
-                    heapSort(arr);
-                }
+    public void heapSort(int[] nums) {
+        int len = nums.length - 1;
+        //创建初始堆
+        buildMaxHeap(nums, len);
+        for (int i = len; i >= 1; --i) {
+            //将最大值放入最后一位
+            int temp = nums[i];
+            nums[i] = nums[0];
+            nums[0] = temp;
+            len -= 1;
+            maxHeapify(nums, 0, len);
+        }
+    }
+
+    /**
+     * 创建大顶堆
+     */
+    private void buildMaxHeap(int[] nums, int len) {
+        for (int i = len / 2; i >= 0; --i) {
+            //从最后非叶子节点开始
+            maxHeapify(nums, i, len);
+        }
+    }
+
+    private void maxHeapify(int[] nums, int i, int len) {
+        for (; (i << 1) + 1 <= len; ) {
+            //左节点
+            int lson = (i << 1) + 1;
+            //右节点
+            int rson = (i << 1) + 2;
+            int large;
+            //左节点大于父节点
+            if (lson <= len && nums[lson] > nums[i]) {
+                large = lson;
+            } else {
+                large = i;
             }
+            //右节点大于(父节点和左节点的最大值)
+            if (rson <= len && nums[rson] > nums[large]) {
+                large = rson;
+            }
+            //最大不是父节点
+            if (large != i) {
+                //交换
+                int temp = nums[i];
+                nums[i] = nums[large];
+                nums[large] = temp;
+                i = large;
+            } else break;
         }
     }
 
