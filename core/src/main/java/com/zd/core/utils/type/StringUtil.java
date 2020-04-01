@@ -203,6 +203,27 @@ public class StringUtil {
         return sum < s.length() ? sum + 1 : sum;
     }
 
+    /**
+     * 最长回文子串
+     */
+    public String longestPalindrome2(String s) {
+        String res = "";
+        //dp: i代表开始,j代表结束
+        boolean[][] dp = new boolean[s.length()][s.length()];
+        //这里从后找,也可以从前找,i=0,j从i递减
+        for (int i = s.length() - 1; i >= 0; i--) {
+            for (int j = i; j < s.length(); j++) {
+                //状态转移方程: i和j的值相同并且j-i<2:初始值或者i+1和j-1的值相同
+                dp[i][j] = s.charAt(i) == s.charAt(j) && (j - i < 2 || dp[i + 1][j - 1]);
+                //设置res最长串
+                if (dp[i][j] && j - i + 1 > res.length()) {
+                    res = s.substring(i, j + 1);
+                }
+            }
+        }
+        return res;
+    }
+
 
     /**
      * 给定字符串 s 和 t ，判断 s 是否为 t 的子序列。
@@ -484,7 +505,49 @@ public class StringUtil {
         return trimmed.split("\\s+").length;
     }
 
+    /**
+     * 括号的嵌套深度
+     */
+    public int[] maxDepthAfterSplit(String seq) {
+        int[] ans = new int[seq.length()];
+        int d = 0;
+        for (int i = 0; i < seq.length(); i++) {
+            //用栈，遇到(push( , 遇到）弹出一个（，depth为栈的长度 ,嵌套深度为技术的分配 给A，偶数的分配给B
+            if (seq.charAt(i) == '(') {
+                d += 1;
+                ans[i] = d % 2;
+            }
+            if (seq.charAt(i) == ')') {
+                ans[i] = d % 2;
+                d -= 1;
+            }
+        }
+        return ans;
+    }
+
+    /**
+     * 最长有效括号
+     */
+    public int longestValidParentheses(String s) {
+        int maxans = 0;
+        int[] dp = new int[s.length()];
+        for (int i = 1; i < s.length(); i++) {
+            //如果遇到)开始记录
+            if (s.charAt(i) == ')') {
+                if (s.charAt(i - 1) == '(') {
+                    //若前一个是（则,记录上一个长度+2
+                    dp[i] = (i >= 2 ? dp[i - 2] : 0) + 2;
+                    //若前一个不是（,则看看i-长度前一个
+                } else if (i - dp[i - 1] > 0 && s.charAt(i - dp[i - 1] - 1) == '(') {
+                    dp[i] = dp[i - 1] + ((i - dp[i - 1]) >= 2 ? dp[i - dp[i - 1] - 2] : 0) + 2;
+                }
+                maxans = Math.max(maxans, dp[i]);
+            }
+        }
+        return maxans;
+    }
+
     public static void main(String[] args) {
-        System.out.println(new StringUtil().firstUniqChar("aadadaad"));
+        System.out.println(new StringUtil().maxDepthAfterSplit("(()())"));
     }
 }
