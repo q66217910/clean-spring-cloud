@@ -547,6 +547,44 @@ public class StringUtil {
         return maxans;
     }
 
+    /**
+     * 通配符匹配
+     */
+    public boolean isMatch(String s, String p) {
+        int sLen = s.length(), pLen = p.length();
+        //字符串相同或者p只为*，直接返回true
+        if (p.equals(s) || p.equals("*")) return true;
+        //两个字符串都为空，返回false
+        if (p.isEmpty() || s.isEmpty()) return false;
+
+        //初始化dp
+        boolean[][] d = new boolean[pLen + 1][sLen + 1];
+        //dp i:通配符字符串的长度，j：被匹配字符串的长度
+        d[0][0] = true;
+
+        for (int i = 1; i < pLen + 1; i++) {
+            //p从第一位起,若是*
+            if (p.charAt(i - 1) == '*') {
+                int sIdx = 1;
+                //*匹配到前一个匹配不到的位置
+                while ((!d[i - 1][sIdx - 1]) && (sIdx < sLen + 1)) sIdx++;
+                //将上一个位置的值设置成当前
+                d[i][sIdx - 1] = d[i - 1][sIdx - 1];
+                //后面的值设置为true，表示后面的都匹配
+                while (sIdx < sLen + 1) d[i][sIdx++] = true;
+            } else if (p.charAt(i - 1) == '?') {
+                //若是？,则当前，为上一个值后移动一位
+                System.arraycopy(d[i - 1], 0, d[i], 1, sLen + 1 - 1);
+            } else {
+                for (int sIdx = 1; sIdx < sLen + 1; sIdx++) {
+                    d[i][sIdx] = d[i - 1][sIdx - 1] &&
+                            (p.charAt(i - 1) == s.charAt(sIdx - 1));
+                }
+            }
+        }
+        return d[pLen][sLen];
+    }
+
     public static void main(String[] args) {
         System.out.println(new StringUtil().maxDepthAfterSplit("(()())"));
     }
