@@ -585,7 +585,76 @@ public class StringUtil {
         return d[pLen][sLen];
     }
 
+    /**
+     * 字符串转数字
+     */
+    public int myAtoi(String str) {
+        str = str.trim();
+        if (str.length() == 0 || "-".equals(str) || "+".equals(str)) {
+            return 0;
+        }
+        int maxNum = 0;
+        boolean[] dp = new boolean[str.length()];
+        if ((('-' == str.charAt(0) || '+' == str.charAt(0)) && Character.isDigit(str.charAt(1)))
+                || Character.isDigit(str.charAt(0))) {
+            dp[0] = true;
+            maxNum++;
+            for (int i = 1; i < str.length(); i++) {
+                if (Character.isDigit(str.charAt(i)) && dp[i - 1]) {
+                    dp[i] = true;
+                    maxNum++;
+                }
+            }
+            BigInteger num = new BigInteger(str.substring(0, maxNum));
+            if (num.compareTo(new BigInteger(String.valueOf(Integer.MIN_VALUE))) < 0) {
+                return Integer.MIN_VALUE;
+            }
+            if (num.compareTo(new BigInteger(String.valueOf(Integer.MAX_VALUE))) > 0) {
+                return Integer.MAX_VALUE;
+            }
+            return num.intValue();
+        }
+        return 0;
+    }
+
+    public boolean isScramble(String s1, String s2) {
+        int m = s2.length();
+        int n = s1.length();
+        if (n != m) {
+            return false;
+        }
+        boolean[][][] dp = new boolean[m][n][n + 1];
+        // 初始化单个字符的情况
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                dp[i][j][1] = s1.charAt(i) == s2.charAt(j);
+            }
+        }
+        // 枚举区间长度 2～n
+        for (int len = 2; len <= n; len++) {
+            // 枚举 S 中的起点位置
+            for (int i = 0; i <= n - len; i++) {
+                for (int j = 0; j <= n - len; j++) {
+                    for (int k = 1; k <= len - 1; k++) {
+                        // 第一种情况：S1 -> T1, S2 -> T2
+                        if (dp[i][j][k] && dp[i + k][j + k][len - k]) {
+                            dp[i][j][len] = true;
+                            break;
+                        }
+                        // 第二种情况：S1 -> T2, S2 -> T1
+                        // S1 起点 i，T2 起点 j + 前面那段长度 len-k ，S2 起点 i + 前面长度k
+                        if (dp[i][j + len - k][k] && dp[i + k][j][len - k]) {
+                            dp[i][j][len] = true;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        return dp[0][0][n];
+    }
+
     public static void main(String[] args) {
-        System.out.println(new StringUtil().maxDepthAfterSplit("(()())"));
+        System.out.println(new StringUtil().myAtoi("+-1"));
     }
 }
