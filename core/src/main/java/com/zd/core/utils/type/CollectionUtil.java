@@ -1,17 +1,7 @@
 package com.zd.core.utils.type;
 
-import com.google.common.collect.Lists;
-import org.apache.catalina.core.ApplicationContext;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.math.BigInteger;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class CollectionUtil {
 
