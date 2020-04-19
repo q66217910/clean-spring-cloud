@@ -1,5 +1,7 @@
 package com.zd.core.utils.type;
 
+import lombok.val;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -126,6 +128,43 @@ public class LinkUtil {
             curr.next = new ListNode(carry);
         }
         return dummyHead.next;
+    }
+
+    public ListNode addTwoNumbers2(ListNode l1, ListNode l2) {
+        ListNode p = l1, q = l2, last = null, cur = null;
+        long v1 = 0, v2 = 0, value = 0;
+        while (p != null) {
+            v1 = v1 * 10 + p.val;
+            p = p.next;
+        }
+        while (q != null) {
+            v2 = v2 * 10 + q.val;
+            q = q.next;
+        }
+        value = v1 + v2;
+        if (value==0){
+            return new ListNode(0);
+        }
+        while (value > 0) {
+            cur = new ListNode((int)value % 10);
+            value /= 10;
+            if (last == null) {
+                last = cur;
+            } else {
+                cur.next = last;
+                last = cur;
+            }
+        }
+        return cur;
+    }
+
+    public static void main(String[] args) {
+        ListNode l1 = new ListNode(3);
+        l1.next = new ListNode(9);
+        l1.next.next = new ListNode(9);
+        l1.next.next.next = new ListNode(9);
+        ListNode l2 = new ListNode(7);
+        new LinkUtil().addTwoNumbers2(l1, l2);
     }
 
     /**

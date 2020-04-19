@@ -89,7 +89,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .withClient("admin")
                 .secret("123456")
                 .authorizedGrantTypes("client_credentials")
-                .scopes("all");
+                .scopes("all")
+                .autoApprove(true);
     }
 
     @Bean
