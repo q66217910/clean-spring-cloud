@@ -159,12 +159,7 @@ public class LinkUtil {
     }
 
     public static void main(String[] args) {
-        ListNode l1 = new ListNode(3);
-        l1.next = new ListNode(9);
-        l1.next.next = new ListNode(9);
-        l1.next.next.next = new ListNode(9);
-        ListNode l2 = new ListNode(7);
-        new LinkUtil().addTwoNumbers2(l1, l2);
+
     }
 
     /**
