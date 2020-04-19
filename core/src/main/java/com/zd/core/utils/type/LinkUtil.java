@@ -127,4 +127,52 @@ public class LinkUtil {
         }
         return dummyHead.next;
     }
+
+    /**
+     * 二进制链表转数字
+     */
+    public int getDecimalValue(ListNode head) {
+        int result = 0;
+        while (head != null) {
+            int value = head.val;
+            if (value == 1) {
+                result = (result << 1) + 1;
+            } else {
+                result = result << 1;
+            }
+            head = head.next;
+        }
+        return result;
+    }
+
+    /**
+     * 倒序排k
+     */
+    public int kthToLast(ListNode head, int k) {
+        List<Integer> list = new ArrayList<>();
+        while (head != null) {
+            list.add(head.val);
+            head = head.next;
+        }
+        return list.get(list.size()-k);
+    }
+
+    public ListNode getKthFromEnd(ListNode head, int k) {
+        List<ListNode> list = new ArrayList<>();
+        while (head != null) {
+            list.add(head);
+            head = head.next;
+        }
+        return list.get(list.size()-k);
+    }
+
+    public int[] reversePrint(ListNode head) {
+        List<Integer> list = new ArrayList<>();
+        while (head != null) {
+            list.add(head.val);
+            head = head.next;
+        }
+        Collections.reverse(list);
+        return list.stream().mapToInt(Integer::intValue).toArray();
+    }
 }

@@ -3,6 +3,7 @@ package com.zd.core.utils.type;
 import com.zd.core.utils.structure.NTree;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class TreeUtil {
@@ -134,6 +135,9 @@ public class TreeUtil {
     }
 
 
+    /**
+     * 中序遍历
+     */
     public TreeNode sortedArrayToBST(int[] nums) {
         return helper(0, nums.length - 1, nums);
     }
@@ -323,8 +327,8 @@ public class TreeUtil {
                         newQueue.add(cur.right);
                     }
                     list.add(cur.val);
-                    if (cur.left != null&&cur.right != null){
-                        if ((cur.left.val==x&&cur.right.val==y)||cur.right.val==x&&cur.left.val==y){
+                    if (cur.left != null && cur.right != null) {
+                        if ((cur.left.val == x && cur.right.val == y) || cur.right.val == x && cur.left.val == y) {
                             return false;
                         }
                     }
@@ -336,6 +340,23 @@ public class TreeUtil {
             queue = newQueue;
         }
         return false;
+    }
+
+    /**
+     * 二叉搜索树第K大
+     */
+    public int kthLargest(TreeNode root, int k) {
+        List<Integer> list = new ArrayList<>();
+        treeAll(root, list);
+        return list.stream().sorted(Comparator.reverseOrder()).skip(k - 1).findFirst().get();
+    }
+
+    private void treeAll(TreeNode node, List<Integer> list) {
+        if (node != null) {
+            list.add(node.val);
+            treeAll(node.left, list);
+            treeAll(node.right, list);
+        }
     }
 
     public static void main(String[] args) {
