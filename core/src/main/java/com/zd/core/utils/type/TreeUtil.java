@@ -359,8 +359,38 @@ public class TreeUtil {
         }
     }
 
+    public List<Integer> rightSideView(TreeNode root) {
+        List<Integer> list = new ArrayList<>();
+        Queue<TreeNode> stack = new ArrayDeque<>();
+        if (root != null) {
+            stack.add(root);
+        }
+        int k = 1;
+        while (true) {
+            Queue<TreeNode> temp = new ArrayDeque<>();
+            while (!stack.isEmpty()) {
+                TreeNode node = stack.poll();
+                if (list.size() < k) {
+                    list.add(node.val);
+                }
+                if (node.right!=null){
+                    temp.add(node.right);
+                }
+                if (node.left!=null){
+                    temp.add(node.left);
+                }
+            }
+            k++;
+            if (temp.isEmpty()) {
+                break;
+            }
+            stack = temp;
+        }
+        return list;
+    }
+
     public static void main(String[] args) {
-        new TreeUtil().isCousins(new TreeNode().build(new int[]{1, 2, 3, 0, 4}), 2, 3);
+        new TreeUtil().rightSideView(new TreeNode().build(new int[]{1, 2, 3, 4}));
     }
 
     public static class TreeNode {
