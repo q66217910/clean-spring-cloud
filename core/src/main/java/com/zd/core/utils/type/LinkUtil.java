@@ -103,8 +103,10 @@ public class LinkUtil {
     }
 
     public void deleteNode(ListNode node) {
-        node.val = node.next.val;
-        node.next = node.next.next;
+        if (node.next != null) {
+            node.val = node.next.val;
+            node.next = node.next.next;
+        }
     }
 
     /**
@@ -142,11 +144,11 @@ public class LinkUtil {
             q = q.next;
         }
         value = v1 + v2;
-        if (value==0){
+        if (value == 0) {
             return new ListNode(0);
         }
         while (value > 0) {
-            cur = new ListNode((int)value % 10);
+            cur = new ListNode((int) value % 10);
             value /= 10;
             if (last == null) {
                 last = cur;
@@ -156,6 +158,51 @@ public class LinkUtil {
             }
         }
         return cur;
+    }
+
+    public ListNode removeDuplicateNodes(ListNode head) {
+        //思路：冒泡排序的思想
+        if (head == null) return null;
+        ListNode first = head;
+        while (first != null) {
+            ListNode second = first;
+            while (second.next != null) {
+                if (second.next.val == first.val) {
+                    second.next = second.next.next;
+                } else {
+                    second = second.next;
+                }
+            }
+            first = first.next;
+        }
+        return head;
+    }
+
+    /**
+     * 合并K个排序链表
+     */
+    public ListNode mergeKLists(ListNode[] lists) {
+        List<Integer> list = new ArrayList<>();
+        for (ListNode listNode : lists) {
+            ListNode head = listNode;
+            while (head != null) {
+                list.add(head.val);
+                head = head.next;
+            }
+        }
+        list = list.stream().sorted().collect(Collectors.toList());
+        ListNode head = null;
+        ListNode pre = null;
+        for (Integer value : list) {
+            ListNode node = new ListNode(value);
+            if (pre != null) {
+                pre.next = node;
+            }else {
+                head = node;
+            }
+            pre = node;
+        }
+        return head;
     }
 
     public static void main(String[] args) {
@@ -188,7 +235,7 @@ public class LinkUtil {
             list.add(head.val);
             head = head.next;
         }
-        return list.get(list.size()-k);
+        return list.get(list.size() - k);
     }
 
     public ListNode getKthFromEnd(ListNode head, int k) {
@@ -197,7 +244,7 @@ public class LinkUtil {
             list.add(head);
             head = head.next;
         }
-        return list.get(list.size()-k);
+        return list.get(list.size() - k);
     }
 
     public int[] reversePrint(ListNode head) {
