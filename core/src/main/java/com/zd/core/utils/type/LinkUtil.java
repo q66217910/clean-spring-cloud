@@ -197,16 +197,12 @@ public class LinkUtil {
             ListNode node = new ListNode(value);
             if (pre != null) {
                 pre.next = node;
-            }else {
+            } else {
                 head = node;
             }
             pre = node;
         }
         return head;
-    }
-
-    public static void main(String[] args) {
-
     }
 
     /**
@@ -255,5 +251,63 @@ public class LinkUtil {
         }
         Collections.reverse(list);
         return list.stream().mapToInt(Integer::intValue).toArray();
+    }
+
+    /**
+     * 链表节点两两交换
+     */
+    public ListNode swapPairs(ListNode head) {
+        //当前节点和下一个节点不为null
+        if ((head == null) || (head.next == null)) {
+            return head;
+        }
+        //两个节点记录
+        ListNode firstNode = head;
+        ListNode secondNode = head.next;
+        //交换
+        firstNode.next = swapPairs(secondNode.next);
+        secondNode.next = firstNode;
+        return secondNode;
+    }
+
+    /**
+     * 反转链表
+     */
+    public ListNode reverseList(ListNode head) {
+        ListNode pre = null;
+        ListNode cur = head;
+        while (cur != null) {
+            ListNode temp = cur.next;
+            cur.next = pre;
+            pre = cur;
+            cur = temp;
+        }
+        return pre;
+    }
+
+    /**
+     * 合并两个有序数组
+     */
+    public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+        //创建一个新的链表
+        ListNode prehead = new ListNode(-1);
+        ListNode prev = prehead;
+        //迭代
+        while (l1 != null && l2 != null) {
+            //把前置节点的next指向小的节点，并把当前链表向后移动
+            if (l1.val <= l2.val) {
+                prev.next = l1;
+                l1 = l1.next;
+            } else {
+                prev.next = l2;
+                l2 = l2.next;
+            }
+            //新链表下个节点
+            prev = prev.next;
+        }
+        //加入最后一个节点
+        prev.next = l1 == null ? l2 : l1;
+        //返回时去掉跟节点
+        return prehead.next;
     }
 }

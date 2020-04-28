@@ -17,7 +17,7 @@ public class CollectionUtil {
     /**
      * 合并两个有序链表
      */
-    public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+    public ListNode (ListNode l1, ListNode l2) {
         //创建一个新的链表
         ListNode prehead = new ListNode(-1);
         ListNode prev = prehead;
