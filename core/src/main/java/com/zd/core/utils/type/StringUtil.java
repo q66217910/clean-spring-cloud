@@ -53,7 +53,7 @@ public class StringUtil {
         return kmp.search(haystack);
     }
 
-    public class KMP {
+    public static class KMP {
         private int[][] dp;
         private String pat;
 
@@ -673,6 +673,7 @@ public class StringUtil {
     }
 
     public static void main(String[] args) {
-        System.out.println(new StringUtil().myAtoi("+-1"));
+        KMP abcd = new KMP("aba");
+        System.out.println(abcd.search("a"));
     }
 }

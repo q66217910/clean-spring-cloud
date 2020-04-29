@@ -952,20 +952,22 @@ public class NumberUtil {
     /**
      * 两数之和
      */
-    public int[] twoSum(int[] numbers, int target) {
-        int low = 0, high = numbers.length - 1;
-        while (low < high) {
-            int sum = numbers[low] + numbers[high];
-            if (sum == target)
-                return new int[]{low + 1, high + 1};
-            else if (sum < target)
-                ++low;
-            else
-                --high;
+    public int[] twoSum(int[] nums, int target) {
+        int[] result = new int[2];
+        Map<Integer,Integer> map = new HashMap<>();
+        for (int i = 0; i < nums.length; i++) {
+            map.put(nums[i],i);
         }
-        return new int[]{-1, -1};
+        for (int i = 0; i < nums.length; i++) {
+            Integer j = map.get(target - nums[i]);
+            if (j!=null&&i!=j){
+                result[0]=i;
+                result[1]=j;
+                break;
+            }
+        }
+        return result;
     }
-
 
 
     public static void main(String[] args) {
