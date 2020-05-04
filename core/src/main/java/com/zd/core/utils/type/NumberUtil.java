@@ -971,6 +971,6 @@ public class NumberUtil {
 
 
     public static void main(String[] args) {
-        System.out.println(new NumberUtil().addStrings("0", "9"));
+        System.out.println(new NumberUtil().guessNumber(10,6));
     }
 }

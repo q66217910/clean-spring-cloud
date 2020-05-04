@@ -373,10 +373,10 @@ public class TreeUtil {
                 if (list.size() < k) {
                     list.add(node.val);
                 }
-                if (node.right!=null){
+                if (node.right != null) {
                     temp.add(node.right);
                 }
-                if (node.left!=null){
+                if (node.left != null) {
                     temp.add(node.left);
                 }
             }
@@ -389,8 +389,60 @@ public class TreeUtil {
         return list;
     }
 
+    /**
+     * 生成不同的二叉搜索树
+     */
+    public List<TreeNode> generateTrees(int n) {
+        if (n == 0) {
+            return new ArrayList<>();
+        }
+        return generateTrees(1, n);
+    }
+
+    private List<TreeNode> generateTrees(int start, int end) {
+        List<TreeNode> all = new LinkedList<>();
+        if (start > end) {
+            all.add(null);
+            return all;
+        }
+        for (int i = start; i <= end; i++) {
+            //生成左子树
+            List<TreeNode> leftTree = generateTrees(start, i - 1);
+            //生成右子树
+            List<TreeNode> rightTree = generateTrees(i + 1, end);
+
+            for (TreeNode left : leftTree) {
+                for (TreeNode right : rightTree) {
+                    TreeNode cur = new TreeNode(i);
+                    cur.left = left;
+                    cur.right = right;
+                    all.add(cur);
+                }
+            }
+        }
+        return all;
+    }
+
+    public List<Integer> inorderTraversal(TreeNode root) {
+        List<Integer> result = new ArrayList<>();
+        inorderTraversal(root, result);
+        return result;
+    }
+
+    public void inorderTraversal(TreeNode node, List<Integer> list) {
+        if (node != null) {
+            if (node.left != null) {
+                inorderTraversal(node.left, list);
+            }
+            list.add(node.val);
+            if (node.right != null) {
+                inorderTraversal(node.right, list);
+            }
+        }
+    }
+
     public static void main(String[] args) {
-        new TreeUtil().rightSideView(new TreeNode().build(new int[]{1, 2, 3, 4}));
+        new TreeUtil().generateTrees(3);
     }
 
     public static class TreeNode {
@@ -422,6 +474,25 @@ public class TreeUtil {
             return tn;
         }
     }
+
+    Map<String, Integer> count;
+    List<TreeNode> ans;
+    public List<TreeNode> findDuplicateSubtrees(TreeNode root) {
+        count = new HashMap();
+        ans = new ArrayList();
+        collect(root);
+        return ans;
+    }
+
+    public String collect(TreeNode node) {
+        if (node == null) return "#";
+        String serial = node.val + "," + collect(node.left) + "," + collect(node.right);
+        count.put(serial, count.getOrDefault(serial, 0) + 1);
+        if (count.get(serial) == 2)
+            ans.add(node);
+        return serial;
+    }
+
 
     final class TreeInfo {
         public final int height;

@@ -8,8 +8,10 @@ import java.util.stream.Collectors;
 public class LinkUtil {
 
     class ListNode {
-        int val;
-        ListNode next;
+        public int val;
+        public ListNode prev;
+        public ListNode next;
+        public ListNode child;
 
         ListNode() {
             next = null;
@@ -107,6 +109,24 @@ public class LinkUtil {
             node.val = node.next.val;
             node.next = node.next.next;
         }
+    }
+
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+        ListNode first = dummy;
+        ListNode second = dummy;
+        // Advances first pointer so that the gap between first and second is n nodes apart
+        for (int i = 1; i <= n + 1; i++) {
+            first = first.next;
+        }
+        // Move first to the end, maintaining the gap
+        while (first != null) {
+            first = first.next;
+            second = second.next;
+        }
+        second.next = second.next.next;
+        return dummy.next;
     }
 
     /**
@@ -309,5 +329,91 @@ public class LinkUtil {
         prev.next = l1 == null ? l2 : l1;
         //返回时去掉跟节点
         return prehead.next;
+    }
+
+    public ListNode detectCycle(ListNode head) {
+        Set<ListNode> visited = new HashSet<ListNode>();
+
+        ListNode node = head;
+        while (node != null) {
+            if (visited.contains(node)) {
+                return node;
+            }
+            visited.add(node);
+            node = node.next;
+        }
+
+        return null;
+    }
+
+    public ListNode oddEvenList(ListNode head) {
+        if (head == null) return null;
+        ListNode odd = head, even = head.next, evenHead = even;
+        while (even != null && even.next != null) {
+            odd.next = even.next;
+            odd = odd.next;
+            even.next = odd.next;
+            even = even.next;
+        }
+        odd.next = evenHead;
+        return head;
+    }
+
+    public ListNode flatten(ListNode head) {
+        if (head == null) return head;
+
+        ListNode pseudoHead = new ListNode(0);
+        ListNode curr, prev = pseudoHead;
+
+        Deque<ListNode> stack = new ArrayDeque<>();
+        stack.push(head);
+
+        while (!stack.isEmpty()) {
+            curr = stack.pop();
+            prev.next = curr;
+            curr.prev = prev;
+
+            if (curr.next != null) stack.push(curr.next);
+            if (curr.child != null) {
+                stack.push(curr.child);
+                // don't forget to remove all child pointers.
+                curr.child = null;
+            }
+            prev = curr;
+        }
+        // detach the pseudo node from the result
+        pseudoHead.next.prev = null;
+        return pseudoHead.next;
+    }
+
+    /**
+     * 旋转链表
+     */
+    public ListNode rotateRight(ListNode head, int k) {
+        if (head == null) {
+            return null;
+        }
+        if (head.next == null) {
+            return head;
+        }
+        //将链表变成环
+        ListNode oldTail = head;
+        //n为链表长度
+        int n;
+        for (n = 1; oldTail.next != null; n++) {
+            oldTail = oldTail.next;
+        }
+        oldTail.next = head;
+
+
+        //k%n 是要移动多少
+        ListNode newTail = head;
+        for (int i = 0; i < n - (k % n) - 1; i++) {
+            newTail = newTail.next;
+        }
+        ListNode newHead = newTail.next;
+        //中断环
+        newTail.next = null;
+        return newHead;
     }
 }
