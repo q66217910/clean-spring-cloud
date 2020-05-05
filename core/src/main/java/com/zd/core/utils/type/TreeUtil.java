@@ -6,6 +6,12 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+/**
+ * 树的遍历
+ * 前序：  父->左->右
+ * 中序：  左->父->右
+ * 后序：   左->右 ->父
+ */
 public class TreeUtil {
 
     /**
@@ -423,6 +429,30 @@ public class TreeUtil {
         return all;
     }
 
+    /**
+     * 前序遍历
+     */
+    public List<Integer> preorderTraversal(TreeNode root) {
+        List<Integer> result = new ArrayList<>();
+        preorderTraversal(root, result);
+        return result;
+    }
+
+    public void preorderTraversal(TreeNode node, List<Integer> list) {
+        if (node != null) {
+            list.add(node.val);
+            if (node.left != null) {
+                preorderTraversal(node.left, list);
+            }
+            if (node.right != null) {
+                preorderTraversal(node.right, list);
+            }
+        }
+    }
+
+    /**
+     * 中序遍历
+     */
     public List<Integer> inorderTraversal(TreeNode root) {
         List<Integer> result = new ArrayList<>();
         inorderTraversal(root, result);
@@ -440,6 +470,29 @@ public class TreeUtil {
             }
         }
     }
+
+    /**
+     * 后序遍历
+     */
+    public List<Integer> postorderTraversal(TreeNode root) {
+        List<Integer> result = new ArrayList<>();
+        postorderTraversal(root, result);
+        return result;
+    }
+
+    public void postorderTraversal(TreeNode node, List<Integer> list) {
+        if (node != null) {
+            if (node.left != null) {
+                postorderTraversal(node.left, list);
+            }
+            if (node.right != null) {
+                postorderTraversal(node.right, list);
+            }
+            list.add(node.val);
+        }
+    }
+
+    
 
     public static void main(String[] args) {
         new TreeUtil().generateTrees(3);
@@ -477,6 +530,7 @@ public class TreeUtil {
 
     Map<String, Integer> count;
     List<TreeNode> ans;
+
     public List<TreeNode> findDuplicateSubtrees(TreeNode root) {
         count = new HashMap();
         ans = new ArrayList();

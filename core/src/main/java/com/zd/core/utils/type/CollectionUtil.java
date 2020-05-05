@@ -1,5 +1,6 @@
 package com.zd.core.utils.type;
 
+import java.lang.reflect.Array;
 import java.math.BigInteger;
 import java.util.*;
 
@@ -50,14 +51,49 @@ public class CollectionUtil {
      */
     public static int removeDuplicates(int[] nums) {
         if (nums.length == 0) return 0;
-        int i = 0;
+        int i = 0, count = 0;
         for (int j = 0; j < nums.length; j++) {
             if (nums[j] != nums[i]) {
+                count = 1;
+            } else {
+                count++;
+            }
+            if (count <= 2) {
                 i++;
                 nums[i] = nums[j];
             }
         }
         return i + 1;
+    }
+
+    public int removeDuplicates2(int[] nums) {
+        if (nums.length == 0) return 0;
+        int i = 1, count = 1;
+        for (int j = 1; j < nums.length; j++) {
+            if (nums[j] != nums[j - 1]) {
+                count = 1;
+            } else {
+                count++;
+            }
+            if (count <= 2) {
+                nums[i++] = nums[j];
+            }
+        }
+        return i;
+    }
+
+    public void sortColors(int[] nums) {
+        Arrays.sort(nums);
+    }
+
+    public int findKthLargest(int[] nums, int k) {
+        return Arrays.stream(nums)
+                .boxed()
+                .sorted(Comparator.<Integer>naturalOrder().reversed())
+                .skip(k-1)
+                .findFirst()
+                .orElse(0);
+
     }
 
     /**
