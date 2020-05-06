@@ -1,9 +1,6 @@
 package com.zd.core.utils.type;
 
-import com.zd.core.utils.structure.NTree;
-
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -33,8 +30,8 @@ public class TreeUtil {
         return (p == null && q == null) ||
                 (p != null && q != null
                         && p.val == q.val
-                        && same(p.right, q.left)
-                        && same(p.left, q.right));
+                        && sameSymmetric(p.right, q.left)
+                        && sameSymmetric(p.left, q.right));
     }
 
 
@@ -107,6 +104,9 @@ public class TreeUtil {
 
     Map<Integer, List<Integer>> map = new HashMap<>();
 
+    /**
+     *  自下而上 右->左
+     */
     public List<List<Integer>> levelOrderBottom(TreeNode root) {
         if (root == null) {
             return new ArrayList<>();
@@ -140,7 +140,41 @@ public class TreeUtil {
         return result;
     }
 
-
+    /**
+     *  自下而上 左->右
+     */
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        if (root == null) {
+            return new ArrayList<>();
+        }
+        List<List<Integer>> result = new LinkedList<>();
+        LinkedList<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        queue.add(null);
+        LinkedList<Integer> tempList = null;
+        while (!queue.isEmpty()) {
+            TreeNode node = queue.removeFirst();
+            if (node != null) {
+                if (tempList == null) {
+                    tempList = new LinkedList<>();
+                }
+                tempList.addLast(node.val);
+                if (node.left != null) {
+                    queue.addLast(node.left);
+                }
+                if (node.right != null) {
+                    queue.addLast(node.right);
+                }
+            } else {
+                if (tempList != null) {
+                    result.add(tempList);
+                    tempList = null;
+                    queue.addLast(null);
+                }
+            }
+        }
+        return result;
+    }
     /**
      * 中序遍历
      */
@@ -492,9 +526,36 @@ public class TreeUtil {
         }
     }
 
-    
+
+
+    /**
+     * 是否是二叉搜索树
+     */
+    public boolean isValidBST(TreeNode root) {
+        return isValidBST(root, null, null);
+    }
+
+    private boolean isValidBST(TreeNode node, Integer lower, Integer upper) {
+        if (node == null) {
+            return true;
+        }
+        if (lower != null && node.val <= lower) {
+            return false;
+        }
+        if (upper != null && node.val >= upper) {
+            return false;
+        }
+        if (!isValidBST(node.right, node.val, upper)) {
+            return false;
+        }
+        if (!isValidBST(node.left, lower, node.val)) {
+            return false;
+        }
+        return true;
+    }
 
     public static void main(String[] args) {
+        new TreeUtil().isValidBST(new TreeNode().build(new int[]{5,3,6,1,4,3,7}));
         new TreeUtil().generateTrees(3);
     }
 

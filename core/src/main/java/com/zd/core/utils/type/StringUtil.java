@@ -589,32 +589,19 @@ public class StringUtil {
      * 字符串转数字
      */
     public int myAtoi(String str) {
-        str = str.trim();
-        if (str.length() == 0 || "-".equals(str) || "+".equals(str)) {
-            return 0;
+        //去除首付空格
+        char[] c = str.trim().toCharArray();
+        if (c.length == 0) return 0;
+        long res = 0;
+        int i = 1, sign = 1;
+        if (c[0] == '-') sign = -1;
+        else if (c[0] != '+') i = 0;
+        for (int j = i; j < c.length; j++) {
+            if (c[j] < '0' || c[j] > '9') break;
+            res = res * 10 + (c[j] - '0');
+            if (res > Integer.MAX_VALUE) return sign == 1 ? Integer.MAX_VALUE : Integer.MIN_VALUE;
         }
-        int maxNum = 0;
-        boolean[] dp = new boolean[str.length()];
-        if ((('-' == str.charAt(0) || '+' == str.charAt(0)) && Character.isDigit(str.charAt(1)))
-                || Character.isDigit(str.charAt(0))) {
-            dp[0] = true;
-            maxNum++;
-            for (int i = 1; i < str.length(); i++) {
-                if (Character.isDigit(str.charAt(i)) && dp[i - 1]) {
-                    dp[i] = true;
-                    maxNum++;
-                }
-            }
-            BigInteger num = new BigInteger(str.substring(0, maxNum));
-            if (num.compareTo(new BigInteger(String.valueOf(Integer.MIN_VALUE))) < 0) {
-                return Integer.MIN_VALUE;
-            }
-            if (num.compareTo(new BigInteger(String.valueOf(Integer.MAX_VALUE))) > 0) {
-                return Integer.MAX_VALUE;
-            }
-            return num.intValue();
-        }
-        return 0;
+        return sign * (int) res;
     }
 
     public boolean isScramble(String s1, String s2) {
@@ -673,7 +660,6 @@ public class StringUtil {
     }
 
     public static void main(String[] args) {
-        KMP abcd = new KMP("aba");
-        System.out.println(abcd.search("a"));
+        System.out.println(Integer.MAX_VALUE);
     }
 }

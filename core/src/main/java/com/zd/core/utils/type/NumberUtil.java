@@ -560,8 +560,8 @@ public class NumberUtil {
             return true;
         }
         while (n > 0) {
-            if (n % 4 == 0) {
-                n /= 4;
+            if (n % 3 == 0) {
+                n /= 3;
                 if (n == 1) {
                     return true;
                 }
@@ -954,21 +954,38 @@ public class NumberUtil {
      */
     public int[] twoSum(int[] nums, int target) {
         int[] result = new int[2];
-        Map<Integer,Integer> map = new HashMap<>();
+        Map<Integer, Integer> map = new HashMap<>();
         for (int i = 0; i < nums.length; i++) {
-            map.put(nums[i],i);
+            map.put(nums[i], i);
         }
         for (int i = 0; i < nums.length; i++) {
             Integer j = map.get(target - nums[i]);
-            if (j!=null&&i!=j){
-                result[0]=i;
-                result[1]=j;
+            if (j != null && i != j) {
+                result[0] = i;
+                result[1] = j;
                 break;
             }
         }
         return result;
     }
 
+    /**
+     * 汉明距离 2进制对应不同的数目
+     */
+    public int hammingDistance(int x, int y) {
+        int num = 0;
+        //一共32位
+        for (int i = 0; i < 32; i++) {
+            int a = x & 1;
+            int b = y & 1;
+            if ((a ^ b) == 1) {
+                num++;
+            }
+            x = x >>> 1;
+            y = y >>> 1;
+        }
+        return num;
+    }
 
     public static void main(String[] args) {
         System.out.println(new NumberUtil().guessNumber(10,6));
