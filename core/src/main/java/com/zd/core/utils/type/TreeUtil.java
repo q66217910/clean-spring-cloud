@@ -1,6 +1,8 @@
 package com.zd.core.utils.type;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -105,7 +107,7 @@ public class TreeUtil {
     Map<Integer, List<Integer>> map = new HashMap<>();
 
     /**
-     *  自下而上 右->左
+     * 自下而上 右->左
      */
     public List<List<Integer>> levelOrderBottom(TreeNode root) {
         if (root == null) {
@@ -141,7 +143,7 @@ public class TreeUtil {
     }
 
     /**
-     *  自下而上 左->右
+     * 自下而上 左->右
      */
     public List<List<Integer>> levelOrder(TreeNode root) {
         if (root == null) {
@@ -175,6 +177,7 @@ public class TreeUtil {
         }
         return result;
     }
+
     /**
      * 中序遍历
      */
@@ -527,7 +530,6 @@ public class TreeUtil {
     }
 
 
-
     /**
      * 是否是二叉搜索树
      */
@@ -554,9 +556,66 @@ public class TreeUtil {
         return true;
     }
 
+    /**
+     * 根据中序和后序遍历生成二叉树
+     */
+    public TreeNode buildTree(int[] inorder, int[] postorder) {
+        AtomicInteger i = new AtomicInteger();
+        //中序遍历值与索引
+        Map<Integer, Integer> indexMap = Arrays.stream(inorder)
+                .boxed()
+                .collect(Collectors.toMap(Function.identity(), v -> i.getAndIncrement()));
+        return buildTree(postorder, indexMap, 0, postorder.length - 1, i);
+    }
+
+    private TreeNode buildTree(int[] postorder, Map<Integer, Integer> indexMap, int left, int right, AtomicInteger ac) {
+        if (left > right) {
+            return null;
+        }
+        int rootIndex = ac.decrementAndGet();
+        //后序遍历的最后一位为跟节点
+        int rootValue = postorder[rootIndex];
+        TreeNode root = new TreeNode(rootValue);
+        //获取中序遍历的root节点
+        int index = indexMap.get(rootValue);
+        //创建右节点，中序遍历root节点右侧
+        root.right = buildTree(postorder, indexMap, index + 1, right, ac);
+        //创建左节点，中序遍历root节点左侧
+        root.left = buildTree(postorder, indexMap, left, index - 1, ac);
+        return root;
+    }
+
+    /**
+     * 根据中序和前序遍历生成二叉树
+     */
+    public TreeNode buildTree2(int[] inorder, int[] preorder) {
+        AtomicInteger i = new AtomicInteger();
+        //中序遍历值与索引
+        Map<Integer, Integer> indexMap = Arrays.stream(inorder)
+                .boxed()
+                .collect(Collectors.toMap(Function.identity(), v -> i.getAndIncrement()));
+        return buildTree2(preorder, indexMap, 0, preorder.length, new AtomicInteger());
+    }
+
+    private TreeNode buildTree2(int[] preorder, Map<Integer, Integer> indexMap, int left, int right, AtomicInteger ac) {
+        if (left == right) {
+            return null;
+        }
+        int rootIndex = ac.getAndIncrement();
+        //后序遍历的最后一位为跟节点
+        int rootValue = preorder[rootIndex];
+        TreeNode root = new TreeNode(rootValue);
+        //获取中序遍历的root节点
+        int index = indexMap.get(rootValue);
+        //创建左节点，中序遍历root节点左侧
+        root.left = buildTree2(preorder, indexMap, left, index, ac);
+        //创建右节点，中序遍历root节点右侧
+        root.right = buildTree2(preorder, indexMap, index + 1, right, ac);
+        return root;
+    }
+
     public static void main(String[] args) {
-        new TreeUtil().isValidBST(new TreeNode().build(new int[]{5,3,6,1,4,3,7}));
-        new TreeUtil().generateTrees(3);
+        new TreeUtil().buildTree(new int[]{1, 2}, new int[]{2, 1});
     }
 
     public static class TreeNode {
