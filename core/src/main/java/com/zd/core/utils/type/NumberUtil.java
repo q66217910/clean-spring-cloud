@@ -987,6 +987,8 @@ public class NumberUtil {
         return num;
     }
 
+   
+
     public static void main(String[] args) {
         System.out.println(new NumberUtil().guessNumber(10,6));
     }

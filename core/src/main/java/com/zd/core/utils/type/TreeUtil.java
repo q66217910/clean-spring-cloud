@@ -652,6 +652,93 @@ public class TreeUtil {
     }
 
     /**
+     * 是否是子树
+     */
+    public boolean isSubtree(TreeNode s, TreeNode t) {
+        boolean a = false, b = false;
+        if (isSameTree(s, t)) {
+            return true;
+        } else {
+            if (s.left != null) {
+                a = isSubtree(s.left, t);
+            }
+            if (s.right != null) {
+                b = isSubtree(s.right, t);
+            }
+        }
+        return a || b;
+    }
+
+    public TreeNode searchBST(TreeNode root, int val) {
+        if (root == null) {
+            return null;
+        }
+        if (root.val == val) {
+            return root;
+        }
+        if (root.val > val) {
+            return searchBST(root.left, val);
+        }
+        return searchBST(root.right, val);
+    }
+
+    public TreeNode insertIntoBST(TreeNode root, int val) {
+        if (root == null) {
+            root = new TreeNode(val);
+        }
+        if (root.val > val) {
+            if (root.left != null) {
+                insertIntoBST(root.left, val);
+            } else {
+                root.left = new TreeNode(val);
+            }
+        }
+        if (root.val < val) {
+            if (root.right != null) {
+                insertIntoBST(root.right, val);
+            } else {
+                root.right = new TreeNode(val);
+            }
+        }
+        return root;
+    }
+
+    private TreeNode pre;
+
+    public TreeNode deleteNode(TreeNode root, int key) {
+        if (root == null) return null;
+
+        if (key > root.val) root.right = deleteNode(root.right, key);
+        else if (key < root.val) root.left = deleteNode(root.left, key);
+        else {
+            if (root.left == null && root.right == null) root = null;
+            else if (root.right != null) {
+                root.val = successor(root);
+                root.right = deleteNode(root.right, root.val);
+            }
+            else {
+                root.val = predecessor(root);
+                root.left = deleteNode(root.left, root.val);
+            }
+        }
+        return root;
+    }
+
+    public int successor(TreeNode root) {
+        root = root.right;
+        while (root.left != null) root = root.left;
+        return root.val;
+    }
+
+
+    public int predecessor(TreeNode root) {
+        root = root.left;
+        while (root.right != null) root = root.right;
+        return root.val;
+    }
+
+
+    /**
      * 填充每个节点的下一个右侧节点指针
      * (完美二叉树)
      */
@@ -786,6 +873,38 @@ public class TreeUtil {
         public TreeInfo(int height, boolean balanced) {
             this.height = height;
             this.balanced = balanced;
+        }
+    }
+
+    class BSTIterator {
+
+        private List<Integer> result;
+
+        private int index = 0;
+
+        public void inorderTraversal(TreeNode node, List<Integer> list) {
+            if (node != null) {
+                if (node.left != null) {
+                    inorderTraversal(node.left, list);
+                }
+                list.add(node.val);
+                if (node.right != null) {
+                    inorderTraversal(node.right, list);
+                }
+            }
+        }
+
+        public BSTIterator(TreeNode root) {
+            result = new LinkedList<>();
+            inorderTraversal(root, result);
+        }
+
+        public int next() {
+            return result.get(index++);
+        }
+
+        public boolean hasNext() {
+            return index < result.size();
         }
     }
 
