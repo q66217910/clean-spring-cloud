@@ -416,4 +416,30 @@ public class LinkUtil {
         newTail.next = null;
         return newHead;
     }
+
+    /**
+     * 排序链表
+     */
+    public ListNode sortList(ListNode head) {
+        List<Integer> list = new ArrayList<>();
+        ListNode cur = head;
+        while (cur != null) {
+            list.add(cur.val);
+            cur = cur.next;
+        }
+        list = list.stream().sorted().collect(Collectors.toList());
+        ListNode node = null;
+        ListNode newHead = null;
+        for (Integer value : list) {
+            ListNode temp = new ListNode(value);
+            if (node == null) {
+                node = temp;
+                newHead = temp;
+            } else {
+                node.next = temp;             
+                node = node.next;
+            }
+        }
+        return newHead;
+    }
 }

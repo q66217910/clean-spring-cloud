@@ -222,6 +222,7 @@ public class TreeUtil {
 
     /**
      * 最近共同父节点
+     * (搜索二叉树)
      */
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
         int pVal = p.val;
@@ -236,6 +237,42 @@ public class TreeUtil {
             }
         }
         return null;
+    }
+
+    /**
+     * 最近共同父节点
+     * (二叉树)
+     */
+    public TreeNode lowestCommonAncestor2(TreeNode root, TreeNode p, TreeNode q) {
+        //记录每一个节点的父节点
+        Map<TreeNode, TreeNode> parent = new HashMap<>();
+        Queue<TreeNode> queue = new ArrayDeque<>();
+        parent.put(root, null);
+        queue.add(root);
+        //遍历所有节点
+        while (!queue.isEmpty()) {
+            TreeNode node = queue.poll();
+            if (node.right != null) {
+                queue.add(node.right);
+                parent.put(node.right, node);
+            }
+            if (node.left != null) {
+                queue.add(node.left);
+                parent.put(node.left, node);
+            }
+        }
+        //查找q的父节点链
+        Set<TreeNode> set = new HashSet<>();
+        while (q != null) {
+            set.add(q);
+            q = parent.get(q);
+        }
+        //p的父节点链中是否与q的相同
+        while (!set.contains(p)) {
+            set.add(p);
+            p = parent.get(p);
+        }
+        return p;
     }
 
     /**
@@ -614,6 +651,75 @@ public class TreeUtil {
         return root;
     }
 
+    /**
+     * 填充每个节点的下一个右侧节点指针
+     * (完美二叉树)
+     */
+    public TreeNode connect(TreeNode root) {
+        if (root == null) {
+            return root;
+        }
+        //广度优先算法
+        Queue<TreeNode> stack = new ArrayDeque<>();
+        stack.add(root);
+        while (!stack.isEmpty()) {
+            int size = stack.size();
+            TreeNode pre = null;
+            for (int i = 0; i < size; i++) {
+                TreeNode node = stack.poll();
+                //设置当前节点的右侧节点
+                node.next = pre;
+                //把当前节点设置
+                pre = node;
+                if (node.right != null) {
+                    stack.add(node.right);
+                }
+                if (node.left != null) {
+                    stack.add(node.left);
+                }
+            }
+        }
+        return root;
+    }
+
+    private static final String spliter = ",";
+    private static final String NN = "X"; //当做 null
+
+    // Encodes a tree to a single string.
+    public String serialize(TreeNode root) {
+        StringBuilder sb = new StringBuilder();
+        buildString(root, sb);
+        return sb.toString();
+    }
+
+    private void buildString(TreeNode node, StringBuilder sb) {
+        if (node == null) {
+            sb.append(NN).append(spliter);
+        } else {
+            sb.append(node.val).append(spliter);
+            buildString(node.left, sb);
+            buildString(node.right,sb);
+        }
+    }
+    // Decodes your encoded data to tree.
+    public TreeNode deserialize(String data) {
+        Deque<String> nodes = new LinkedList<>();
+        nodes.addAll(Arrays.asList(data.split(spliter)));
+        return buildTree(nodes);
+    }
+
+    private TreeNode buildTree(Deque<String> nodes) {
+        String val = nodes.remove();
+        if (val.equals(NN)) return null;
+        else {
+            TreeNode node = new TreeNode(Integer.valueOf(val));
+            node.left = buildTree(nodes);
+            node.right = buildTree(nodes);
+            return node;
+        }
+    }
+
+
     public static void main(String[] args) {
         new TreeUtil().buildTree(new int[]{1, 2}, new int[]{2, 1});
     }
@@ -622,9 +728,14 @@ public class TreeUtil {
         int val;
         TreeNode left;
         TreeNode right;
+        TreeNode next;
 
         TreeNode(int x) {
             val = x;
+        }
+
+        public int getVal() {
+            return val;
         }
 
         TreeNode() {
