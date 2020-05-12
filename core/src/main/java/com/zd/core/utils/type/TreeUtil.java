@@ -715,8 +715,7 @@ public class TreeUtil {
             else if (root.right != null) {
                 root.val = successor(root);
                 root.right = deleteNode(root.right, root.val);
-            }
-            else {
+            } else {
                 root.val = predecessor(root);
                 root.left = deleteNode(root.left, root.val);
             }
@@ -785,9 +784,10 @@ public class TreeUtil {
         } else {
             sb.append(node.val).append(spliter);
             buildString(node.left, sb);
-            buildString(node.right,sb);
+            buildString(node.right, sb);
         }
     }
+
     // Decodes your encoded data to tree.
     public TreeNode deserialize(String data) {
         Deque<String> nodes = new LinkedList<>();
@@ -863,6 +863,31 @@ public class TreeUtil {
         if (count.get(serial) == 2)
             ans.add(node);
         return serial;
+    }
+
+    private int maxSum = Integer.MIN_VALUE;
+
+    public int maxGain(TreeNode node) {
+        if (node == null) return 0;
+
+        // max sum on the left and right sub-trees of node
+        int left_gain = Math.max(maxGain(node.left), 0);
+        int right_gain = Math.max(maxGain(node.right), 0);
+
+        // the price to start a new path where `node` is a highest node
+        int price_newpath = node.val + left_gain + right_gain;
+
+        // update max_sum if it's better to start a new path
+        maxSum = Math.max(maxSum, price_newpath);
+
+        // for recursion :
+        // return the max gain if continue the same path
+        return node.val + Math.max(left_gain, right_gain);
+    }
+
+    public int maxPathSum(TreeNode root) {
+        maxGain(root);
+        return maxSum;
     }
 
 
