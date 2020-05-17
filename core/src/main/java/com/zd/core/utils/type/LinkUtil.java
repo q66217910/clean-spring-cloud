@@ -291,6 +291,31 @@ public class LinkUtil {
     }
 
     /**
+     * 每隔k个反转链表
+     */
+    public ListNode reverseKGroup(ListNode head, int k) {
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+
+        ListNode pre = dummy;
+        ListNode end = dummy;
+
+        while (end.next != null) {
+            for (int i = 0; i < k && end != null; i++) end = end.next;
+            if (end == null) break;
+            ListNode start = pre.next;
+            ListNode next = end.next;
+            end.next = null;
+            pre.next = reverseList(start);
+            start.next = next;
+            pre = start;
+            end = pre;
+        }
+        return dummy.next;
+    }
+
+
+    /**
      * 反转链表
      */
     public ListNode reverseList(ListNode head) {
@@ -436,10 +461,12 @@ public class LinkUtil {
                 node = temp;
                 newHead = temp;
             } else {
-                node.next = temp;             
+                node.next = temp;
                 node = node.next;
             }
         }
         return newHead;
     }
+
+
 }
