@@ -831,6 +831,55 @@ public class TreeUtil {
         }
     }
 
+    public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+        List<List<Integer>> list = new ArrayList<>();
+        if (root == null) {
+            return list;
+        }
+        Queue<TreeNode> queue = new ArrayDeque<>();
+        queue.add(root);
+        boolean flag = false;
+        while (!queue.isEmpty()) {
+            List<Integer> temp = new ArrayList<>();
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                TreeNode node = queue.poll();
+                if (flag) {
+                    temp.add(0, node.val);
+                } else {
+                    temp.add(node.val);
+                }
+                if (node.left != null) {
+                    queue.add(node.left);
+                }
+                if (node.right != null) {
+                    queue.add(node.right);
+                }
+            }
+            list.add(temp);
+            flag = !flag;
+        }
+        return list;
+    }
+
+    public int goodNodes(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        return goodNodes(root.left, root.val) + goodNodes(root.right, root.val) + 1;
+    }
+
+    public int goodNodes(TreeNode node, int max) {
+        if (node == null) {
+            return 0;
+        }
+        int count = 0;
+        if (node.val >= max) {
+            count++;
+        }
+        return goodNodes(node.left, Math.max(max, node.val)) + goodNodes(node.right, Math.max(max, node.val)) + count;
+    }
+
 
     public static void main(String[] args) {
         new TreeUtil().buildTree(new int[]{1, 2}, new int[]{2, 1});
@@ -890,6 +939,57 @@ public class TreeUtil {
         return serial;
     }
 
+    private int maxSum = Integer.MIN_VALUE;
+
+    public int maxGain(TreeNode node) {
+        if (node == null) return 0;
+
+        // max sum on the left and right sub-trees of node
+        int left_gain = Math.max(maxGain(node.left), 0);
+        int right_gain = Math.max(maxGain(node.right), 0);
+
+        // the price to start a new path where `node` is a highest node
+        int price_newpath = node.val + left_gain + right_gain;
+
+        // update max_sum if it's better to start a new path
+        maxSum = Math.max(maxSum, price_newpath);
+
+        // for recursion :
+        // return the max gain if continue the same path
+        return node.val + Math.max(left_gain, right_gain);
+    }
+
+    public int maxPathSum(TreeNode root) {
+        maxGain(root);
+        return maxSum;
+    }
+
+    /**
+     * 合并二叉树
+     */
+    public TreeNode mergeTrees(TreeNode t1, TreeNode t2) {
+        if (t1 == null)
+            return t2;
+        if (t2 == null)
+            return t1;
+        t1.val += t2.val;
+        t1.left = mergeTrees(t1.left, t2.left);
+        t1.right = mergeTrees(t1.right, t2.right);
+        return t1;
+    }
+
+    public int rangeSumBST(TreeNode root, int L, int R) {
+        if (root == null) {
+            return 0;
+        }
+        int sum = 0;
+        if (root.val >= L && root.val <= R) {
+            sum += root.val;
+        }
+        sum += rangeSumBST(root.right, L, R);
+        sum += rangeSumBST(root.left, L, R);
+        return sum;
+    }
     public int sumRootToLeaf(TreeNode root) {
         return sumRootToLeaf(root, 0);
     }
