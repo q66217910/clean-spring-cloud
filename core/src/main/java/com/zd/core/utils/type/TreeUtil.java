@@ -715,8 +715,7 @@ public class TreeUtil {
             else if (root.right != null) {
                 root.val = successor(root);
                 root.right = deleteNode(root.right, root.val);
-            }
-            else {
+            } else {
                 root.val = predecessor(root);
                 root.left = deleteNode(root.left, root.val);
             }
@@ -737,6 +736,31 @@ public class TreeUtil {
         return root.val;
     }
 
+
+    /**
+     * 叶子节点相似
+     */
+    public boolean leafSimilar(TreeNode root1, TreeNode root2) {
+        List<Integer> leaf1 = new ArrayList<>();
+        List<Integer> leaf2 = new ArrayList<>();
+        findLeaf(root1, leaf1);
+        findLeaf(root2, leaf2);
+        return leaf1.equals(leaf2);
+    }
+
+    /**
+     * 寻找叶子节点
+     */
+    public void findLeaf(TreeNode node, List<Integer> list) {
+        if (node != null) {
+            if (node.right == null && node.left == null) {
+                //子节点
+                list.add(node.val);
+            }
+            findLeaf(node.left, list);
+            findLeaf(node.right, list);
+        }
+    }
 
     /**
      * 填充每个节点的下一个右侧节点指针
@@ -785,9 +809,10 @@ public class TreeUtil {
         } else {
             sb.append(node.val).append(spliter);
             buildString(node.left, sb);
-            buildString(node.right,sb);
+            buildString(node.right, sb);
         }
     }
+
     // Decodes your encoded data to tree.
     public TreeNode deserialize(String data) {
         Deque<String> nodes = new LinkedList<>();
@@ -865,6 +890,38 @@ public class TreeUtil {
         return serial;
     }
 
+    public int sumRootToLeaf(TreeNode root) {
+        return sumRootToLeaf(root, 0);
+    }
+
+    private int sumRootToLeaf(TreeNode root, int value) {
+        if (root == null) {
+            return 0;
+        }
+        int res = 0;
+        value = (value << 1) + root.val;
+        if (root.left == null && root.right == null) {
+            //叶子节点
+            return value;
+        }
+        res += sumRootToLeaf(root.left, value);
+        res %= Math.pow(10, 9) + 7;
+        res += sumRootToLeaf(root.right, value);
+        res %= Math.pow(10, 9) + 7;
+        return res;
+    }
+
+    private int sum = 0;
+
+    public TreeNode convertBST(TreeNode root) {
+        if (root != null) {
+            convertBST(root.right);
+            sum += root.val;
+            root.val = sum;
+            convertBST(root.left);
+        }
+        return root;
+    }
 
     final class TreeInfo {
         public final int height;
