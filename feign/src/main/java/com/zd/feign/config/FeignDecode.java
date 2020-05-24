@@ -96,7 +96,7 @@ public class FeignDecode {
             return _typeFactory.constructParametricType(rowClass, javaTypes);
         } else {
             // 简单类型直接用该类构建JavaType
-            return _typeFactory.constructParametricType((Class) type, new JavaType[0]);
+            return _typeFactory.constructType(type);
         }
     }
 }
