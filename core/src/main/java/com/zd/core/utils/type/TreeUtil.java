@@ -856,10 +856,6 @@ public class TreeUtil {
     }
 
 
-    public static void main(String[] args) {
-        new TreeUtil().buildTree(new int[]{1, 2}, new int[]{2, 1});
-    }
-
     public static class TreeNode {
         int val;
         TreeNode left;
@@ -964,6 +960,38 @@ public class TreeUtil {
         sum += rangeSumBST(root.right, L, R);
         sum += rangeSumBST(root.left, L, R);
         return sum;
+    }
+
+    public static void main(String[] args) {
+        System.out.println( new TreeUtil().pseudoPalindromicPaths(new TreeNode().build(new int[]{2, 3, 1, 3, 1, 0, 1})));;
+    }
+
+    public int pseudoPalindromicPaths(TreeNode root) {
+        return pseudoPalindromicPaths(root, new ArrayList<>());
+    }
+
+    public int pseudoPalindromicPaths(TreeNode root, List<Integer> list) {
+        int count = 0;
+        list.add(root.val);
+        if (root.left == null && root.right == null) {
+            //叶子节点,判断是否回文
+            return isPalindrome(list) ? 1 : 0;
+        }
+        if (root.left != null) {
+            count += pseudoPalindromicPaths(root.left, new ArrayList<>(list));
+        }
+        if (root.right != null) {
+            count += pseudoPalindromicPaths(root.right, new ArrayList<>(list));
+        }
+        return count;
+    }
+
+    /**
+     * 是否是回文串
+     */
+    public boolean isPalindrome(List<Integer> list) {
+        return list.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
+                .values().stream().filter(a -> a % 2 == 1).count() <= 1;
     }
 
     final class TreeInfo {
