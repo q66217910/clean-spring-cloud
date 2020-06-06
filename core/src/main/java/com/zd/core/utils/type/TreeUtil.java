@@ -880,6 +880,16 @@ public class TreeUtil {
         return goodNodes(node.left, Math.max(max, node.val)) + goodNodes(node.right, Math.max(max, node.val)) + count;
     }
 
+    public TreeNode increasingBST(TreeNode root) {
+        List<Integer> vals = new ArrayList();
+        inorderTraversal(root, vals);
+        TreeNode ans = new TreeNode(0), cur = ans;
+        for (int v : vals) {
+            cur.right = new TreeNode(v);
+            cur = cur.right;
+        }
+        return ans.right;
+    }
 
     public static class TreeNode {
         int val;
@@ -986,6 +996,7 @@ public class TreeUtil {
         sum += rangeSumBST(root.left, L, R);
         return sum;
     }
+
     public int sumRootToLeaf(TreeNode root) {
         return sumRootToLeaf(root, 0);
     }
@@ -1020,7 +1031,8 @@ public class TreeUtil {
     }
 
     public static void main(String[] args) {
-        System.out.println( new TreeUtil().pseudoPalindromicPaths(new TreeNode().build(new int[]{2, 3, 1, 3, 1, 0, 1})));;
+        System.out.println(new TreeUtil().pseudoPalindromicPaths(new TreeNode().build(new int[]{2, 3, 1, 3, 1, 0, 1})));
+        ;
     }
 
     public int pseudoPalindromicPaths(TreeNode root) {
@@ -1059,6 +1071,103 @@ public class TreeUtil {
             this.height = height;
             this.balanced = balanced;
         }
+    }
+
+    public boolean isUnivalTree(TreeNode root) {
+        return isUnivalTree(root, root.val);
+    }
+
+    public boolean isUnivalTree(TreeNode node, int value) {
+        if (node == null) {
+            return true;
+        }
+        if (node.val != value) {
+            return false;
+        }
+        return isUnivalTree(node.left, value) && isUnivalTree(node.right, value);
+    }
+
+    public TreeNode trimBST(TreeNode root, int L, int R) {
+        if (root == null) return root;
+        if (root.val > R) return trimBST(root.left, L, R);
+        if (root.val < L) return trimBST(root.right, L, R);
+
+        root.left = trimBST(root.left, L, R);
+        root.right = trimBST(root.right, L, R);
+        return root;
+    }
+
+    public List<Double> averageOfLevels(TreeNode root) {
+        List<Double> res = new ArrayList<>();
+        Queue<TreeNode> queue = new ArrayDeque<>();
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            List<Integer> list = new ArrayList<>();
+            for (int i = 0; i < size; i++) {
+                TreeNode node = queue.poll();
+                list.add(node.val);
+                if (node.left != null) {
+                    queue.add(node.left);
+                }
+                if (node.right != null) {
+                    queue.add(node.right);
+                }
+            }
+            res.add(list.stream().mapToDouble(Integer::doubleValue).average().orElse(0d));
+        }
+        return res;
+    }
+
+    int d = 0;
+
+    public int findTilt(TreeNode root) {
+        findTilt2(root);
+        return d;
+    }
+
+    public int findTilt2(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        int left = findTilt2(root.left);
+        int right = findTilt2(root.right);
+        d += Math.abs(right - left);
+        return left + right + root.val;
+    }
+
+    public int minDiffInBST(TreeNode root) {
+        List<Integer> list = inorderTraversal(root);
+        List<Integer> collect = list.stream().sorted().collect(Collectors.toList());
+        int min = Integer.MAX_VALUE;
+        for (int i = 1; i < collect.size(); i++) {
+            min = Math.min(min, Math.abs(collect.get(i) - collect.get(i - 1)));
+        }
+        return min;
+    }
+
+    public int findSecondMinimumValue(TreeNode root) {
+        List<Integer> list = inorderTraversal(root);
+        List<Integer> collect = list.stream().distinct().sorted().collect(Collectors.toList());
+        return collect.stream().skip(1).findFirst().orElse(-1);
+    }
+
+    public int[] findMode(TreeNode root) {
+        List<Integer> list = inorderTraversal(root);
+        Map<Integer, Long> map = list.stream().collect(Collectors.groupingBy(Function.identity(),
+                Collectors.counting()));
+        Map<Long, List<Integer>> collect = map.entrySet().stream()
+                .collect(Collectors.groupingBy(Map.Entry::getValue,
+                        Collectors.mapping(Map.Entry::getKey, Collectors.toList())));
+        return collect.entrySet()
+                .stream()
+                .sorted(Map.Entry.comparingByKey(Comparator.reverseOrder()))
+                .findFirst()
+                .map(Map.Entry::getValue)
+                .orElseGet(ArrayList::new)
+                .stream()
+                .mapToInt(Integer::intValue)
+                .toArray();
     }
 
     class BSTIterator {
