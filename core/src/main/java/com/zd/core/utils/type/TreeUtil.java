@@ -1030,10 +1030,6 @@ public class TreeUtil {
         return root;
     }
 
-    public static void main(String[] args) {
-        System.out.println(new TreeUtil().pseudoPalindromicPaths(new TreeNode().build(new int[]{2, 3, 1, 3, 1, 0, 1})));
-        ;
-    }
 
     public int pseudoPalindromicPaths(TreeNode root) {
         return pseudoPalindromicPaths(root, new ArrayList<>());
@@ -1168,6 +1164,54 @@ public class TreeUtil {
                 .stream()
                 .mapToInt(Integer::intValue)
                 .toArray();
+    }
+
+    public TreeNode recoverFromPreorder(String S) {
+        Map<Integer, TreeNode> map = new HashMap<>();
+        int num = 0;
+        //处理root节点
+        int start = 0;
+        StringBuilder sb = new StringBuilder();
+        for (start = 0; start < S.length(); start++) {
+            if (S.charAt(start) == '-') {
+                map.put(0, new TreeNode(Integer.parseInt(sb.toString())));
+                sb = new StringBuilder();
+                break;
+            }
+            sb.append(S.charAt(start));
+        }
+
+        if (start == S.length()) {
+            return new TreeNode(Integer.parseInt(sb.toString()));
+        }
+
+        for (int i = start; i < S.length(); i++) {
+            if (S.charAt(i) == '-') {
+                num++;
+            }
+            if (Character.isDigit(S.charAt(i))) {
+                sb.append(S.charAt(i));
+            }
+            if (i == S.length() - 1 || (S.charAt(i + 1) == '-' && Character.isDigit(S.charAt(i)))) {
+                TreeNode node = new TreeNode(Integer.parseInt(sb.toString()));
+                TreeNode lastNode = map.get(num - 1);
+                if (lastNode != null) {
+                    if (lastNode.left == null) {
+                        lastNode.left = node;
+                    } else {
+                        lastNode.right = node;
+                    }
+                }
+                map.put(num, node);
+                num = 0;
+                sb = new StringBuilder();
+            }
+        }
+        return map.get(0);
+    }
+
+    public static void main(String[] args) {
+        System.out.println(new TreeUtil().recoverFromPreorder("3"));
     }
 
     class BSTIterator {
