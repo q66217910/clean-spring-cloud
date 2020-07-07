@@ -880,9 +880,15 @@ public class TreeUtil {
         return goodNodes(node.left, Math.max(max, node.val)) + goodNodes(node.right, Math.max(max, node.val)) + count;
     }
 
-
-    public static void main(String[] args) {
-        new TreeUtil().buildTree(new int[]{1, 2}, new int[]{2, 1});
+    public TreeNode increasingBST(TreeNode root) {
+        List<Integer> vals = new ArrayList();
+        inorderTraversal(root, vals);
+        TreeNode ans = new TreeNode(0), cur = ans;
+        for (int v : vals) {
+            cur.right = new TreeNode(v);
+            cur = cur.right;
+        }
+        return ans.right;
     }
 
     public static class TreeNode {
@@ -990,6 +996,7 @@ public class TreeUtil {
         sum += rangeSumBST(root.left, L, R);
         return sum;
     }
+
     public int sumRootToLeaf(TreeNode root) {
         return sumRootToLeaf(root, 0);
     }
@@ -1023,6 +1030,35 @@ public class TreeUtil {
         return root;
     }
 
+
+    public int pseudoPalindromicPaths(TreeNode root) {
+        return pseudoPalindromicPaths(root, new ArrayList<>());
+    }
+
+    public int pseudoPalindromicPaths(TreeNode root, List<Integer> list) {
+        int count = 0;
+        list.add(root.val);
+        if (root.left == null && root.right == null) {
+            //叶子节点,判断是否回文
+            return isPalindrome(list) ? 1 : 0;
+        }
+        if (root.left != null) {
+            count += pseudoPalindromicPaths(root.left, new ArrayList<>(list));
+        }
+        if (root.right != null) {
+            count += pseudoPalindromicPaths(root.right, new ArrayList<>(list));
+        }
+        return count;
+    }
+
+    /**
+     * 是否是回文串
+     */
+    public boolean isPalindrome(List<Integer> list) {
+        return list.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
+                .values().stream().filter(a -> a % 2 == 1).count() <= 1;
+    }
+
     final class TreeInfo {
         public final int height;
         public final boolean balanced;
@@ -1031,6 +1067,151 @@ public class TreeUtil {
             this.height = height;
             this.balanced = balanced;
         }
+    }
+
+    public boolean isUnivalTree(TreeNode root) {
+        return isUnivalTree(root, root.val);
+    }
+
+    public boolean isUnivalTree(TreeNode node, int value) {
+        if (node == null) {
+            return true;
+        }
+        if (node.val != value) {
+            return false;
+        }
+        return isUnivalTree(node.left, value) && isUnivalTree(node.right, value);
+    }
+
+    public TreeNode trimBST(TreeNode root, int L, int R) {
+        if (root == null) return root;
+        if (root.val > R) return trimBST(root.left, L, R);
+        if (root.val < L) return trimBST(root.right, L, R);
+
+        root.left = trimBST(root.left, L, R);
+        root.right = trimBST(root.right, L, R);
+        return root;
+    }
+
+    public List<Double> averageOfLevels(TreeNode root) {
+        List<Double> res = new ArrayList<>();
+        Queue<TreeNode> queue = new ArrayDeque<>();
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            List<Integer> list = new ArrayList<>();
+            for (int i = 0; i < size; i++) {
+                TreeNode node = queue.poll();
+                list.add(node.val);
+                if (node.left != null) {
+                    queue.add(node.left);
+                }
+                if (node.right != null) {
+                    queue.add(node.right);
+                }
+            }
+            res.add(list.stream().mapToDouble(Integer::doubleValue).average().orElse(0d));
+        }
+        return res;
+    }
+
+    int d = 0;
+
+    public int findTilt(TreeNode root) {
+        findTilt2(root);
+        return d;
+    }
+
+    public int findTilt2(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        int left = findTilt2(root.left);
+        int right = findTilt2(root.right);
+        d += Math.abs(right - left);
+        return left + right + root.val;
+    }
+
+    public int minDiffInBST(TreeNode root) {
+        List<Integer> list = inorderTraversal(root);
+        List<Integer> collect = list.stream().sorted().collect(Collectors.toList());
+        int min = Integer.MAX_VALUE;
+        for (int i = 1; i < collect.size(); i++) {
+            min = Math.min(min, Math.abs(collect.get(i) - collect.get(i - 1)));
+        }
+        return min;
+    }
+
+    public int findSecondMinimumValue(TreeNode root) {
+        List<Integer> list = inorderTraversal(root);
+        List<Integer> collect = list.stream().distinct().sorted().collect(Collectors.toList());
+        return collect.stream().skip(1).findFirst().orElse(-1);
+    }
+
+    public int[] findMode(TreeNode root) {
+        List<Integer> list = inorderTraversal(root);
+        Map<Integer, Long> map = list.stream().collect(Collectors.groupingBy(Function.identity(),
+                Collectors.counting()));
+        Map<Long, List<Integer>> collect = map.entrySet().stream()
+                .collect(Collectors.groupingBy(Map.Entry::getValue,
+                        Collectors.mapping(Map.Entry::getKey, Collectors.toList())));
+        return collect.entrySet()
+                .stream()
+                .sorted(Map.Entry.comparingByKey(Comparator.reverseOrder()))
+                .findFirst()
+                .map(Map.Entry::getValue)
+                .orElseGet(ArrayList::new)
+                .stream()
+                .mapToInt(Integer::intValue)
+                .toArray();
+    }
+
+    public TreeNode recoverFromPreorder(String S) {
+        Map<Integer, TreeNode> map = new HashMap<>();
+        int num = 0;
+        //处理root节点
+        int start = 0;
+        StringBuilder sb = new StringBuilder();
+        for (start = 0; start < S.length(); start++) {
+            if (S.charAt(start) == '-') {
+                map.put(0, new TreeNode(Integer.parseInt(sb.toString())));
+                sb = new StringBuilder();
+                break;
+            }
+            sb.append(S.charAt(start));
+        }
+
+        if (start == S.length()) {
+            return new TreeNode(Integer.parseInt(sb.toString()));
+        }
+
+        for (int i = start; i < S.length(); i++) {
+            if (S.charAt(i) == '-') {
+                num++;
+            }
+            if (Character.isDigit(S.charAt(i))) {
+                sb.append(S.charAt(i));
+            }
+            if (i == S.length() - 1 || (S.charAt(i + 1) == '-' && Character.isDigit(S.charAt(i)))) {
+                TreeNode node = new TreeNode(Integer.parseInt(sb.toString()));
+                TreeNode lastNode = map.get(num - 1);
+                if (lastNode != null) {
+                    if (lastNode.left == null) {
+                        lastNode.left = node;
+                    } else {
+                        lastNode.right = node;
+                    }
+                }
+                map.put(num, node);
+                num = 0;
+                sb = new StringBuilder();
+            }
+        }
+        return map.get(0);
+    }
+
+    public static void main(String[] args) {
+        System.out.println(new TreeUtil().recoverFromPreorder("3"));
     }
 
     class BSTIterator {
