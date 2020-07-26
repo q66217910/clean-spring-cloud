@@ -26,8 +26,6 @@ public class RedisTemplateClass<HK, HV> extends RedisTemplate<HK, HV> {
     }
 
     public RedisTemplateClass factory(RedisConfig redisConfig) {
-
-
         RedisStandaloneConfiguration configuration = new RedisStandaloneConfiguration(redisConfig.getHost(), redisConfig.getPort());
         configuration.setPassword(redisConfig.getPassword());
         configuration.setDatabase(redisConfig.getDb());
@@ -37,7 +35,6 @@ public class RedisTemplateClass<HK, HV> extends RedisTemplate<HK, HV> {
         factory.afterPropertiesSet();
         this.setConnectionFactory(factory);
         this.afterPropertiesSet();
-        
         return this;
     }
 
