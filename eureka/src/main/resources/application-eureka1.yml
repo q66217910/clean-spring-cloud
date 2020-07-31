@@ -10,4 +10,7 @@ eureka:
     hostname: eureka-1
   client:
     serviceUrl:
-      defaultZone: http://eureka-2:21002/eureka/,http://eureka-3:21003/eureka/
+      defaultZone: http://eureka-2:21002/eureka/,http://eureka-3:21003/eureka/  
+  server:
+    expected-client-renewal-interval-seconds: 30
+    renewal-percent-threshold: 0.85
