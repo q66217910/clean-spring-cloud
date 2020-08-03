@@ -1,8 +1,7 @@
 package com.zd.user.config;
 
+import com.zd.core.config.mysql.datasouces.AuthDatasource;
 import com.zd.core.config.redis.template.RedisTemplateToken;
-import org.redisson.api.RLock;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,9 +14,9 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
-import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
+import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
-import java.util.concurrent.TimeUnit;
+import javax.sql.DataSource;
 
 @Configuration
 @EnableAuthorizationServer
@@ -35,20 +34,24 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
      */
     private final RedisTemplateToken redisTemplateToken;
 
-    public AuthorizationServerConfig(AuthenticationManager authenticationManager, JwtAccessTokenConverter accessTokenConverter, RedisTemplateToken redisTemplateToken) {
+    private final DataSource authDatasource;
+
+    public AuthorizationServerConfig(AuthenticationManager authenticationManager, JwtAccessTokenConverter accessTokenConverter
+            , RedisTemplateToken redisTemplateToken, DataSource authDatasource) {
         this.authenticationManager = authenticationManager;
         this.accessTokenConverter = accessTokenConverter;
         this.redisTemplateToken = redisTemplateToken;
+        this.authDatasource = authDatasource;
     }
 
     /**
-     * 令牌存储
+     * 令牌生成策略
      *
-     * @return redis令牌存储对象
+     * @return 令牌生成策略
      */
     @Bean
     public TokenStore tokenStore() {
-        return new RedisTokenStore(redisTemplateToken.getConnectionFactory());
+        return new JwtTokenStore(new JwtAccessTokenConverter());
     }
 
     /**
@@ -85,12 +88,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         //授权码授权模式(Authorization code)
-        clients.inMemory()
-                .withClient("admin")
-                .secret("123456")
-                .authorizedGrantTypes("client_credentials")
-                .scopes("all")
-                .autoApprove(true);
+        clients.jdbc(authDatasource);
     }
 
     @Bean
