@@ -25,10 +25,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
-                .withUser("lisi")
-                .password(new BCryptPasswordEncoder().encode("123456"))
-                    .authorities("ADMIN");
         auth.userDetailsService(userDetailsService);
     }
 
@@ -54,7 +50,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
-                .antMatchers("/favicon.ico","/webjars/**","/v2/api-docs","/swagger-resources/**","/swagger-ui.html").permitAll()
+                .antMatchers("/favicon.ico", "/webjars/**", "/v2/api-docs", "/swagger-resources/**", "/swagger-ui.html").permitAll()
                 .and().httpBasic().and().csrf().disable();
     }
 }

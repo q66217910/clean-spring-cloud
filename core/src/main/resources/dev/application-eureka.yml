@@ -7,7 +7,7 @@ eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:21001/eureka/,http://localhost:21002/eureka/,http://localhost:21003/eureka/
-
+    :
 management:
   endpoints:
     web:
