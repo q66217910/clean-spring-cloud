@@ -60,7 +60,8 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 .antMatchers("/favicon.ico","/webjars/**","/v2/api-docs","/swagger-resources/**","/swagger-ui.html").permitAll()
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
                 .anyRequest().authenticated()
-                .and().formLogin().permitAll();
+                .and().formLogin().permitAll()
+                .and().httpBasic().disable();
     }
 
     /**

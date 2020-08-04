@@ -17,12 +17,11 @@ import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
+import java.util.Collection;
+
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-
-    @Autowired
-    private WebApplicationContext applicationContext;
 
     /**
      * http安全配置
@@ -32,18 +31,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        RequestMappingHandlerMapping mapping = applicationContext.getBean(RequestMappingHandlerMapping.class);
+        RequestMappingHandlerMapping mapping = getApplicationContext().getBean(RequestMappingHandlerMapping.class);
         String[] urls = mapping.getHandlerMethods()
                 .keySet()
                 .stream()
                 .map(RequestMappingInfo::getPatternsCondition)
                 .map(PatternsRequestCondition::getPatterns)
-                .map(a->a.stream().findAny().get())
+                .flatMap(Collection::stream)
                 .toArray(String[]::new);
         http.authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
                 .antMatchers("/favicon.ico", "/webjars/**", "/v2/api-docs", "/swagger-resources/**", "/swagger-ui.html").permitAll()
-                .and().httpBasic().and().csrf().disable();
+                .and()
+                .csrf()
+                .and()
+                .httpBasic()
+                .disable();
     }
 
     @Bean

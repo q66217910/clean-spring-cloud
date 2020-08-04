@@ -2,7 +2,7 @@ security:
   oauth2:
     client:
       access-token-uri: http://localhost:23001/oauth/token
-      user-authorization-uri: http://localhost:23001/oauth/authorize
+      user-authorization-uri: http://localhost:23001/oauth/check_token
       client-id: admin
       client-secret: 123456
       grant-type: client_credentials
