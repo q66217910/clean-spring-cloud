@@ -33,17 +33,4 @@ public class UserDetailConfig {
     public UserDetailsService userDetailsService() {
         return userName -> new User(userName, new BCryptPasswordEncoder().encode("123456"), Lists.newArrayList());
     }
-
-    /**
-     * 全局用户信息
-     *
-     * @param auth 认证管理
-     * @throws Exception 用户认证异常信息
-     */
-    @Autowired
-    public void globalUserDetails(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService()).passwordEncoder(new BCryptPasswordEncoder());
-    }
-
-
 }

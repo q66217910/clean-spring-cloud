@@ -1,10 +1,11 @@
 package com.zd.user.config;
 
-import com.zd.core.config.mysql.datasouces.AuthDatasource;
-import com.zd.core.config.redis.template.RedisTemplateToken;
+import com.zd.core.config.common.WebSecurityConfig;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
@@ -12,6 +13,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationManager;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
@@ -22,25 +24,13 @@ import javax.sql.DataSource;
 @EnableAuthorizationServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
-    /**
-     * 认证管理器
-     */
-    private final AuthenticationManager authenticationManager;
-
     private final JwtAccessTokenConverter accessTokenConverter;
-
-    /**
-     * redis连接工厂
-     */
-    private final RedisTemplateToken redisTemplateToken;
 
     private final DataSource authDatasource;
 
-    public AuthorizationServerConfig(AuthenticationManager authenticationManager, JwtAccessTokenConverter accessTokenConverter
-            , RedisTemplateToken redisTemplateToken, DataSource authDatasource) {
-        this.authenticationManager = authenticationManager;
+    public AuthorizationServerConfig(JwtAccessTokenConverter accessTokenConverter
+            , DataSource authDatasource) {
         this.accessTokenConverter = accessTokenConverter;
-        this.redisTemplateToken = redisTemplateToken;
         this.authDatasource = authDatasource;
     }
 
@@ -54,14 +44,17 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         return new JwtTokenStore(new JwtAccessTokenConverter());
     }
 
+    @Autowired
+    private WebSecurityConfig webSecurityConfig;
+
     /**
      * 用来配置授权（authorization）以及令牌（token）的访问端点和令牌服务(token services)。
      */
     @Override
-    public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
-        endpoints.authenticationManager(this.authenticationManager)
-                .tokenStore(tokenStore())
-                .accessTokenConverter(accessTokenConverter);
+    public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+        endpoints.tokenStore(tokenStore())
+                .accessTokenConverter(accessTokenConverter)
+                .authenticationManager(webSecurityConfig.authenticationManager());
     }
 
     /**
@@ -88,12 +81,13 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         //授权码授权模式(Authorization code)
-        clients.jdbc(authDatasource);
+        clients.jdbc(authDatasource)
+                .passwordEncoder(passwordEncoder())
+                .build();
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 }
