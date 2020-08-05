@@ -8,7 +8,4 @@ security:
       grant-type: client_credentials
       scope: all
     resource:
-      user-info-uri: http://localhost:23001/oauth/token
-      token-info-uri: http://localhost:23001/oauth/check_token
-    authorization:
-      check-token-access: http://localhost:23001/oauth/check_token
+      user-info-uri: http://localhost:23001/oauth/check_token
