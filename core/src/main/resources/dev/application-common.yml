@@ -6,3 +6,7 @@ token:
 feign:
   hystrix:
     enabled: true
+
+hystrix:
+  requestCache:
+    enabled: true #请求缓存

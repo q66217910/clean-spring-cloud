@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.concurrent.CompletableFuture;
+
 @RestController
 @RequestMapping("/example")
 public class ExampleController implements ExampleApi {
@@ -23,6 +25,11 @@ public class ExampleController implements ExampleApi {
     @GetMapping("/example")
     public ResultBean<String> getExample() {
         return ResultBean.<String>builder().data("a").build();
+    }
+
+    @Override
+    public CompletableFuture getExample1() {
+        return null;
     }
 
     @GetMapping("/user")
