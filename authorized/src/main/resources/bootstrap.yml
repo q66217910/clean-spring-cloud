@@ -3,6 +3,6 @@ server:
 
 spring:
   profiles:
-    active: eureka,redis,token,mysql,zipkin
+    active: eureka,redis,token,mysql,zipkin,security
   application:
     name: authorized

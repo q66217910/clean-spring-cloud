@@ -1,9 +1,10 @@
 package com.zd.sleuth;
 
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.SpringCloudApplication;
+import zipkin.server.EnableZipkinServer;
 
+@EnableZipkinServer
 @SpringCloudApplication
 public class SleuthApplication {
 

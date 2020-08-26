@@ -3,14 +3,17 @@ package com.zd.core.config.common;
 import com.zd.core.bean.ResultBean;
 import com.zd.core.config.common.properties.Oauth2Property;
 import com.zd.core.utils.json.JacksonUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.oauth2.client.filter.OAuth2ClientAuthenticationProcessingFilter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
@@ -27,6 +30,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     private final Oauth2Property oauth2Property;
 
     private final ApplicationContext context;
+
 
     public ResourceServerConfig(Oauth2Property oauth2Property, ApplicationContext context) {
         this.oauth2Property = oauth2Property;

@@ -1,6 +1,7 @@
 spring:
   zipkin:
-    base-url: http://localhost:24001/
+    base-url: http://www.uetty.com:9411
+    enabled: true
   sleuth:
     sampler:
       probability: 1
