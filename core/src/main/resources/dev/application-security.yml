@@ -9,3 +9,8 @@ security:
       scope: all
     resource:
       user-info-uri: http://localhost:23001/oauth/check_token
+
+token:
+  oauth2:
+    header: Authorization
+    start: Bearer

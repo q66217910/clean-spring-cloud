@@ -1,4 +1,0 @@
-token:
-  oauth2:
-    header: Authorization
-    start: Bearer
