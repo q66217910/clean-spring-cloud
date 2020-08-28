@@ -1,0 +1,5 @@
+FROM java:8
+VOLUME /data/eureka
+ADD eureka-1.0.0.jar eureka.jar
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/eureka.jar","--spring.profiles.active","eureka1"]
+EXPOSE 21001
